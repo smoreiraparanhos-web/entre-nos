@@ -349,8 +349,6 @@ def por_slug(slug):
 # =====================================================================
 # Início
 # =====================================================================
-principal = por_slug("o-que-e-ansiedade")
-secundarias = "\n".join(leitura(por_slug(s)) for s in ("tristeza-ou-depressao", "como-procurar-ajuda-psicologica", "como-apoiar-alguem"))
 
 def contagem(k):
     n = len(POR_CATEGORIA[k])
@@ -358,6 +356,20 @@ def contagem(k):
 
 temas = "\n".join(f'          <li><a href="{{{{u:pages/conhecimento.html}}}}?categoria={k}"><span>{e(v)}</span><small>{contagem(k)}</small></a></li>'
                   for k, v in CATEGORIAS.items())
+SINAIS = [
+    ("A preocupação não desliga, nem na hora de dormir.", "o-que-e-ansiedade"),
+    ("A tristeza está durando mais do que você esperava.", "tristeza-ou-depressao"),
+    ("Você se sente só, mesmo com gente por perto.", "sozinho-mesmo-acompanhado"),
+    ("O cansaço não passa com o fim de semana.", "esgotamento-emocional"),
+    ("A fase está difícil e você não sabe o que fazer com isso.", "periodos-dificeis"),
+    ("Você pensa em procurar ajuda, mas não sabe por onde começar.", "como-procurar-ajuda-psicologica"),
+    ("Alguém de quem você gosta não está bem.", "como-apoiar-alguem"),
+]
+sinais = "\n".join(
+    f'          <li><a href="{{{{u:{url_artigo(por_slug(s))}}}}}"><span>{e(frase)}</span><small>{e(CATEGORIAS[por_slug(s)["categoria"]])} · {por_slug(s)["leitura"]} min</small></a></li>'
+    for frase, s in SINAIS)
+lmin, lmax = min(a["leitura"] for a in ARTIGOS), max(a["leitura"] for a in ARTIGOS)
+n_art, n_fontes = len(ARTIGOS), len(F)
 credito = f'\n            <figcaption>{e(HERO["credito"])}</figcaption>' if HERO["credito"] else ""
 
 def fase(estacao, nome, texto, desenho):
@@ -379,16 +391,16 @@ fases = "\n".join([
 ])
 
 pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
- "Plataforma independente de saúde emocional: leituras com fontes indicadas, pausas guiadas e caminhos de apoio. Gratuita, sem cadastro e sem rastreamento.",
+ "Para quando a preocupação não desliga, o cansaço não passa ou a tristeza demora a ir embora: leituras com fontes indicadas, pausas de um minuto e caminhos gratuitos de ajuda. Sem cadastro.",
  f'''    <section class="hero">
       <div class="container hero__grade">
         <div>
-          <span class="sobretitulo">Saúde emocional</span>
-          <h1>Um espaço para cuidar do que <em>sentimos</em>.</h1>
-          <p class="lead">Leituras cuidadosas, pausas para respirar e caminhos de apoio. Sem pressa, no seu tempo.</p>
+          <span class="sobretitulo">Um espaço para cuidar do que sentimos</span>
+          <h1>Você não precisa estar bem <em>o tempo todo</em>.</h1>
+          <p class="lead">Leituras de quatro minutos para entender o que você sente, pausas de um minuto para respirar e caminhos gratuitos de ajuda.</p>
           <div class="acoes">
-            <a class="botao" href="{{{{u:pages/conhecimento.html}}}}">Explorar as leituras</a>
-            <a class="botao botao--contorno" href="{{{{u:pages/momentos.html}}}}">Fazer uma pausa</a>
+            <a class="botao" href="{{{{u:pages/conhecimento.html}}}}">Entender o que sinto</a>
+            <a class="botao botao--contorno" href="{{{{u:pages/momentos.html}}}}">Fazer uma pausa agora</a>
           </div>
           <ul class="hero__garantias">
             <li>Gratuito</li>
@@ -402,55 +414,52 @@ pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
       </div>
     </section>
 
-    <section class="secao" aria-labelledby="t-caminhos">
+    <section class="secao" aria-labelledby="t-sinais">
+      <div class="container">
+        <div class="abertura">
+          <div>
+            <span class="sobretitulo">Talvez você tenha chegado aqui porque</span>
+            <h2 id="t-sinais">Tem dias que pesam mais do que deveriam</h2>
+          </div>
+          <div class="abertura__texto">
+            <p>O sono não descansa. A preocupação não desliga. A casa está cheia e, mesmo assim, falta companhia.</p>
+            <p>Nada disso é fraqueza ou falta de esforço. E costuma ficar mais leve quando a gente consegue dar nome ao que está acontecendo.</p>
+          </div>
+        </div>
+        <ul class="temas temas--duas">
+{sinais}
+        </ul>
+        <p style="margin-top:var(--e-4)"><a class="link-seta" href="{{{{u:pages/conhecimento.html}}}}">Ver todas as leituras</a></p>
+      </div>
+    </section>
+
+    <section class="secao secao--borda" aria-labelledby="t-caminhos">
       <div class="container">
         <div class="secao__cabecalho">
-          <span class="sobretitulo">Por onde começar</span>
-          <h2 id="t-caminhos">O que você procura hoje?</h2>
+          <span class="sobretitulo">Como este espaço ajuda</span>
+          <h2 id="t-caminhos">Entender, pausar, pedir ajuda</h2>
+          <p>Três caminhos, na ordem que fizer sentido para você hoje.</p>
         </div>
         <ol class="caminhos">
           <li class="caminho">
             <span class="caminho__num" aria-hidden="true">01</span>
-            <h3><a href="{{{{u:pages/conhecimento.html}}}}">Quero entender</a></h3>
-            <p>Textos sobre ansiedade, tristeza, solidão e esgotamento, com as fontes indicadas.</p>
+            <h3><a href="{{{{u:pages/conhecimento.html}}}}">Entender</a></h3>
+            <p>Textos curtos que explicam o que é ansiedade, tristeza, solidão e esgotamento, com as fontes à vista.</p>
             <span class="caminho__seta" aria-hidden="true">→</span>
           </li>
           <li class="caminho">
             <span class="caminho__num" aria-hidden="true">02</span>
-            <h3><a href="{{{{u:pages/momentos.html}}}}">Quero uma pausa</a></h3>
-            <p>Quatro exercícios breves de respiração, atenção e reflexão. De um a três minutos.</p>
+            <h3><a href="{{{{u:pages/momentos.html}}}}">Pausar</a></h3>
+            <p>Quatro exercícios guiados de respiração, atenção e reflexão. O mais curto leva um minuto.</p>
             <span class="caminho__seta" aria-hidden="true">→</span>
           </li>
           <li class="caminho">
             <span class="caminho__num" aria-hidden="true">03</span>
-            <h3><a href="{{{{u:pages/encontrar-ajuda.html}}}}">Preciso de ajuda</a></h3>
-            <p>Serviços públicos e gratuitos, e como chegar a um atendimento profissional.</p>
+            <h3><a href="{{{{u:pages/encontrar-ajuda.html}}}}">Pedir ajuda</a></h3>
+            <p>Para onde ligar e aonde ir: serviços públicos e gratuitos, explicados sem burocracia.</p>
             <span class="caminho__seta" aria-hidden="true">→</span>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <section class="secao secao--borda" aria-labelledby="t-leituras">
-      <div class="container">
-        <div class="secao__cabecalho">
-          <span class="sobretitulo">Conhecimento</span>
-          <h2 id="t-leituras">Leituras para começar</h2>
-        </div>
-        <div class="destaque">
-          <article class="destaque__principal">
-            <span class="etiqueta">{e(CATEGORIAS[principal["categoria"]])}</span>
-            <h3><a href="{{{{u:{url_artigo(principal)}}}}}">{e(principal["titulo"])}</a></h3>
-            <p>{e(principal["intro"])}</p>
-            <p class="meta">{principal["leitura"]} min de leitura · {"Revisado por profissional" if principal["revisado"] else "Aguardando revisão profissional"}</p>
-          </article>
-          <div>
-            <div class="leituras">
-{secundarias}
-            </div>
-            <p style="margin-top:var(--e-4)"><a class="link-seta" href="{{{{u:pages/conhecimento.html}}}}">Ver todas as leituras</a></p>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -470,6 +479,40 @@ pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
       </div>
     </section>
 
+    <section class="secao" aria-labelledby="t-encontra">
+      <div class="container">
+        <div class="secao__cabecalho">
+          <span class="sobretitulo">Sem letras miúdas</span>
+          <h2 id="t-encontra">O que você leva daqui</h2>
+        </div>
+        <div class="encontra">
+          <ul class="lista-marcada">
+            <li><strong>Nome para o que você sente.</strong> Em textos de {lmin} a {lmax} minutos, sem termos difíceis.</li>
+            <li><strong>Critério para decidir.</strong> A diferença entre um período ruim e um sinal de que vale procurar um profissional.</li>
+            <li><strong>Algo para fazer agora.</strong> Uma pausa guiada de um minuto, quando a cabeça não para.</li>
+            <li><strong>Um caminho concreto.</strong> Para onde ligar e aonde ir, sem depender de indicação.</li>
+            <li><strong>Palavras para apoiar alguém.</strong> O que dizer, e o que evitar, quando quem sofre é outra pessoa.</li>
+          </ul>
+          <div class="limites">
+            <h3>O que este espaço não faz</h3>
+            <ul>
+              <li>Não faz diagnóstico nem teste.</li>
+              <li>Não promete cura nem resultado.</li>
+              <li>Não substitui psicólogo ou médico.</li>
+              <li>Não pede cadastro e não guarda nada do que você faz aqui.</li>
+              <li>Não exibe anúncios e não vende seus dados.</li>
+            </ul>
+            <p><a class="link-seta" href="{{{{u:pages/responsabilidade.html}}}}">Como produzimos os conteúdos</a></p>
+          </div>
+        </div>
+        <dl class="numeros">
+          <div><dt>{n_art}</dt><dd>leituras publicadas, todas com a situação de revisão informada</dd></div>
+          <div><dt>{n_fontes}</dt><dd>fontes institucionais citadas, como OMS e Ministério da Saúde</dd></div>
+          <div><dt>0</dt><dd>cookies, cadastros ou anúncios</dd></div>
+        </dl>
+      </div>
+    </section>
+
     <section class="secao" aria-labelledby="t-temas">
       <div class="container">
         <div class="secao__cabecalho">
@@ -483,17 +526,63 @@ pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
       </div>
     </section>
 
+    <section class="secao secao--borda" aria-labelledby="t-faq">
+      <div class="container faq">
+        <div class="secao__cabecalho">
+          <span class="sobretitulo">Perguntas frequentes</span>
+          <h2 id="t-faq">Antes de começar</h2>
+        </div>
+        <div class="faq__lista">
+          <details>
+            <summary>Isso substitui terapia?</summary>
+            <p>Não. O Entre Nós informa e orienta, mas não avalia nem acompanha ninguém. Se o que você sente dura semanas ou atrapalha o seu dia a dia, o caminho é um profissional. <a href="{{{{u:pages/artigos/como-procurar-ajuda-psicologica.html}}}}">Veja como procurar</a>.</p>
+          </details>
+          <details>
+            <summary>O que eu fizer aqui fica registrado?</summary>
+            <p>Não. O site não tem cadastro, não usa cookies e não grava nada no seu navegador. A busca e os exercícios funcionam só no seu aparelho. <a href="{{{{u:pages/privacidade.html}}}}">Leia a política de privacidade</a>.</p>
+          </details>
+          <details>
+            <summary>Quem escreve os textos?</summary>
+            <p>A equipe do Entre Nós, a partir de fontes institucionais listadas ao final de cada leitura. Os textos ainda aguardam revisão de um profissional de saúde mental, e cada um informa isso logo no início.</p>
+          </details>
+          <details>
+            <summary>Preciso estar mal para usar?</summary>
+            <p>Não. Dá para ler por curiosidade, para se conhecer melhor ou para ajudar outra pessoa. Se você estiver em crise, não espere: ligue <a href="tel:188">188</a> (CVV) ou <a href="tel:192">192</a> (SAMU).</p>
+          </details>
+          <details>
+            <summary>Quanto tempo eu preciso?</summary>
+            <p>Pouco. As leituras levam de {lmin} a {lmax} minutos e as pausas, de um a três. Você pode parar quando quiser e voltar depois.</p>
+          </details>
+          <details>
+            <summary>É gratuito mesmo?</summary>
+            <p>Sim. Não há assinatura, anúncio ou área paga. O projeto tem prioridade no impacto social e não vende informação de ninguém.</p>
+          </details>
+          <details>
+            <summary>Estou preocupado com outra pessoa. Serve para mim?</summary>
+            <p>Serve. Comece por <a href="{{{{u:pages/artigos/como-apoiar-alguem.html}}}}">Como apoiar alguém que está passando por dificuldades?</a></p>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <section class="secao secao--areia" aria-labelledby="t-apoio">
       <div class="container apoio">
         <div>
-          <span class="sobretitulo">Apoio</span>
-          <h2 id="t-apoio">Se hoje estiver difícil demais</h2>
-          <p>Você não precisa esperar a situação piorar para pedir ajuda. Estes serviços são gratuitos e funcionam a qualquer hora.</p>
-          <div class="acoes"><a class="botao botao--contorno" href="{{{{u:pages/encontrar-ajuda.html}}}}">Ver todos os caminhos de ajuda</a></div>
+          <span class="sobretitulo">Para hoje</span>
+          <h2 id="t-apoio">Comece pelo que couber no seu dia</h2>
+          <p>Não precisa resolver tudo de uma vez. Uma leitura de quatro minutos ou uma pausa de um já é um começo.</p>
+          <div class="acoes">
+            <a class="botao" href="{{{{u:pages/conhecimento.html}}}}">Escolher uma leitura</a>
+            <a class="botao botao--contorno" href="{{{{u:pages/momentos.html}}}}">Fazer uma pausa agora</a>
+          </div>
         </div>
-        <div class="telefones">
-          <a class="telefone" href="tel:188"><strong>188</strong><span><b>CVV — Centro de Valorização da Vida</b>Apoio emocional, 24 horas</span></a>
-          <a class="telefone" href="tel:192"><strong>192</strong><span><b>SAMU</b>Emergências médicas, 24 horas</span></a>
+        <div>
+          <h3 class="apoio__titulo">Se hoje estiver difícil demais</h3>
+          <div class="telefones">
+            <a class="telefone" href="tel:188"><strong>188</strong><span><b>CVV — Centro de Valorização da Vida</b>Apoio emocional, gratuito, 24 horas</span></a>
+            <a class="telefone" href="tel:192"><strong>192</strong><span><b>SAMU</b>Emergências médicas, 24 horas</span></a>
+          </div>
+          <p style="margin-top:var(--e-3)"><a class="link-seta" href="{{{{u:pages/encontrar-ajuda.html}}}}">Ver todos os caminhos de ajuda</a></p>
         </div>
       </div>
     </section>''', atual="inicio", faixa=False,
@@ -509,7 +598,7 @@ filtros = f'            <button class="filtro" type="button" data-filtro="todas"
     f'            <button class="filtro" type="button" data-filtro="{k}" aria-pressed="false">{e(v)} <small>{len(POR_CATEGORIA[k])}</small></button>' for k, v in CATEGORIAS.items())
 todos = "\n".join(leitura(a, "h2", biblioteca=True) for a in ARTIGOS)
 pagina("pages/conhecimento.html", "Conhecimento", "Biblioteca de leituras sobre saúde emocional: ansiedade, depressão, solidão, esgotamento, relacionamentos e mais, com fontes indicadas.",
- cabecalho("Biblioteca", "Conhecimento", "Textos para compreender melhor o que sentimos. Cada leitura indica autoria, fontes e situação de revisão.") + f'''
+ cabecalho("Biblioteca", "Conhecimento", "Textos curtos para dar nome ao que você sente. Cada um mostra quem escreveu, de onde veio a informação e se já foi revisado.") + f'''
     <section class="secao">
       <div class="container">
         <div class="busca" role="search">
@@ -635,7 +724,7 @@ sumario = '''
           <a href="#ex-reflexao">Uma pergunta <small>livre</small></a>
         </nav>'''
 pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de respiração, atenção aos sentidos, pausa e reflexão. Nada é registrado.",
- cabecalho("Momentos", "Um momento para mim", "Pequenas pausas para fazer agora, no seu ritmo. Nada do que você fizer aqui é registrado ou enviado.", sumario) + '''
+ cabecalho("Momentos", "Um momento para mim", "Quatro pausas de um a três minutos, para quando a cabeça não para. Nada do que você fizer aqui é registrado.", sumario) + '''
     <section class="secao">
       <div class="container">
         <p class="aviso" style="max-width:46rem;margin-bottom:var(--e-6)"><strong>Um cuidado:</strong> estes exercícios são convites de pausa, não tratamentos. Se algum deles causar desconforto, pare. Em sofrimento intenso, veja <a href="{{u:pages/encontrar-ajuda.html}}">Encontrar ajuda</a>.</p>
@@ -703,7 +792,7 @@ pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de res
 # Encontrar ajuda
 # =====================================================================
 pagina("pages/encontrar-ajuda.html", "Encontrar ajuda", "Caminhos de apoio em saúde mental no Brasil: CVV 188, SAMU 192, CAPS, UBS e como procurar atendimento psicológico.",
- cabecalho("Apoio", "Encontrar ajuda", "Pedir ajuda é um gesto de cuidado. Aqui estão caminhos públicos e gratuitos de atendimento no Brasil.") + f'''
+ cabecalho("Apoio", "Encontrar ajuda", "Pedir ajuda não é exagero. Aqui estão caminhos públicos e gratuitos de atendimento no Brasil, e como chegar a cada um.") + f'''
     <section class="secao" style="padding-bottom:0">
       <div class="container">
         <div class="urgencia">
