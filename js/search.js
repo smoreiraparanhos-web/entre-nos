@@ -30,7 +30,7 @@
         if (!cartao.hidden) visiveis++;
       });
       vazio.hidden = visiveis !== 0;
-      info.textContent = visiveis === 1 ? '1 conteúdo encontrado.' : visiveis + ' conteúdos encontrados.';
+      info.textContent = visiveis === 1 ? '1 leitura encontrada.' : visiveis + ' leituras encontradas.';
     }
 
     function escolher(nova) {

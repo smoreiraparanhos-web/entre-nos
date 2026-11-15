@@ -1,28 +1,79 @@
 /* Ajustes por largura de tela */
-@media (max-width: 60rem) {
-  .rodape__grade { grid-template-columns: 1fr 1fr; }
+@media (max-width: 64rem) {
+  .rodape__grade { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .rodape__grade > :first-child { grid-column: 1 / -1; }
+  .fases { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fase:nth-child(3) { padding-left: 0; border-left: 0; }
+  .fase:nth-child(n+3) { border-top: 1px solid rgba(255, 255, 255, .22); }
+  .temas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .caminho { grid-template-columns: 3rem minmax(0, 1fr) auto; }
+  .caminho { row-gap: 0.35rem; }
+  .caminho__num { grid-column: 1; grid-row: 1; }
+  .caminho h3 { grid-column: 2; grid-row: 1; }
+  .caminho p { grid-column: 2; grid-row: 2; }
+  .caminho__seta { grid-column: 3; grid-row: 1 / 3; align-self: center; }
+  .servico { grid-template-columns: 7rem minmax(0, 1fr); }
+  .servico__corpo { grid-column: 2; }
 }
-@media (max-width: 52rem) {
+@media (max-width: 56rem) {
+  /* Menu recolhido (somente com JavaScript ativo) */
   .js .menu-botao { display: inline-flex; }
-  .topo__linha { flex-wrap: wrap; }
-  .nav { width: 100%; }
+  .topo__linha { flex-wrap: wrap; row-gap: 0; }
+  .nav { width: 100%; order: 5; }
   .js .nav { display: none; padding-bottom: var(--e-3); }
   .js .nav.is-aberta { display: block; }
   .nav__lista { flex-wrap: wrap; }
-  .js .nav__lista { flex-direction: column; }
-  .nav__lista a { padding: var(--e-2); font-size: var(--t-base); }
-  .nav__lista a[aria-current="page"] { box-shadow: inset 3px 0 0 var(--verde-natural); }
+  .js .nav__lista { flex-direction: column; gap: 0; border-top: 1px solid var(--borda); }
+  .js .nav__lista a { padding: 0.9rem 0.25rem; font-size: var(--t-lg); font-family: var(--fonte-titulo); border-bottom: 1px solid var(--borda); border-radius: 0; }
+
+  .hero__grade, .destaque, .ciclos__intro, .apoio, .exercicio { grid-template-columns: minmax(0, 1fr); }
+  .hero .moldura img { aspect-ratio: 16 / 10; }
+  .destaque__principal { min-height: 0; }
+  .destaque__principal h3 { margin-top: var(--e-5); }
+  .leituras--biblioteca .leitura { grid-template-columns: minmax(0, 1fr); gap: var(--e-1); }
+  .leituras--biblioteca .leitura .etiqueta { padding-top: 0; }
+  .ficha { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e-3) var(--e-4); }
+  .exercicio__palco { min-height: 0; }
 }
 @media (max-width: 36rem) {
-  .container { padding-inline: var(--e-3); }
-  .rodape__grade { grid-template-columns: 1fr; }
+  .marca { font-size: 1.3rem; }
+  .marca svg { width: 1.5rem; height: 1.5rem; }
+  .topo__linha { gap: var(--e-1); }
+  .botao--ajuda { padding-inline: 0.85rem; }
+  .menu-botao { padding-inline: 0.8rem; }
+  .menu-botao__icone { display: none; }
   .acoes .botao { flex: 1 1 100%; }
-  .filtros { flex-wrap: nowrap; overflow-x: auto; padding-bottom: var(--e-1); margin-inline: calc(var(--e-3) * -1); padding-inline: var(--e-3); }
+  .temas, .fases { grid-template-columns: minmax(0, 1fr); }
+  .caminho { grid-template-columns: 2.25rem minmax(0, 1fr) auto; column-gap: var(--e-2); }
+  .caminho__num { padding-left: 0; }
+  .fase, .fase + .fase { padding: var(--e-4) 0; border-left: 0; }
+  .fase + .fase { border-top: 1px solid rgba(255, 255, 255, .22); }
+  .fase svg { margin-bottom: var(--e-2); }
+  .servico { grid-template-columns: minmax(0, 1fr); gap: var(--e-2); }
+  .servico__corpo { grid-column: 1; }
+  .rodape__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prosa--artigo { font-size: 1.1875rem; }
+  .prosa--artigo h2 { font-size: 1.5rem; }
+  /* Filtros em uma linha rolável, com esmaecimento indicando que há mais */
+  .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -1.15rem; padding: 2px 2.5rem 2px 1.15rem;
+    -webkit-mask-image: linear-gradient(to right, #000 85%, transparent); mask-image: linear-gradient(to right, #000 85%, transparent); }
+  .filtros::-webkit-scrollbar { display: none; }
   .filtro { flex: none; }
-  .prosa--artigo { font-size: 1.0625rem; }
 }
 @media print {
-  .topo, .rodape, .apoio-faixa, .acoes, .relacionados { display: none; }
+  .topo, .rodape, .apoio-faixa, .acoes, .relacionados, .trilha { display: none; }
   body { background: #fff; }
+}
+/* Ordem do cabeçalho em telas pequenas: marca · ajuda · menu, e a navegação abaixo */
+@media (max-width: 56rem) {
+  .topo .botao--ajuda { order: 2; }
+  .menu-botao { order: 3; }
+}
+/* Cabeçalho em celulares: marca, ajuda e menu na mesma linha */
+@media (max-width: 36rem) {
+  .rotulo-longo { display: none; }
+  .rotulo-curto { display: inline; }
+}
+@media (max-width: 22.5rem) {
+  .marca { font-size: 1.2rem; }
 }
