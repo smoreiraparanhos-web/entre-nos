@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Um momento para mim — Entre Nós</title>
+  <meta name="description" content="Exercícios simples de respiração, atenção aos sentidos, pausa e reflexão. Nada é registrado.">
+  <meta name="theme-color" content="#263D32">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Entre Nós">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Um momento para mim — Entre Nós">
+  <meta property="og:description" content="Exercícios simples de respiração, atenção aos sentidos, pausa e reflexão. Nada é registrado.">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <script src="../js/main.js" defer></script>
+  <script src="../js/navigation.js" defer></script>
+  <script src="../js/exercises.js" defer></script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="container topo__linha">
+      <a class="marca" href="../index.html" aria-label="Entre Nós — página inicial"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/><g fill="#DCE6D9"><path d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/></g></svg><span>Entre Nós</span></a>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal">Menu</button>
+      <nav class="nav" id="nav-principal" aria-label="Navegação principal">
+        <ul class="nav__lista">
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="conhecimento.html">Conhecimento</a></li>
+            <li><a href="momentos.html" aria-current="page">Momentos</a></li>
+            <li><a href="encontrar-ajuda.html">Encontrar ajuda</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <div class="cabecalho-pagina">
+      <div class="container">
+        <span class="sobretitulo">Momentos</span>
+        <h1>Um momento para mim</h1>
+        <p class="lead">Pequenas pausas para fazer agora, no seu ritmo. Nada do que você fizer aqui é registrado ou enviado.</p>
+      </div>
+    </div>
+    <section class="secao">
+      <div class="container">
+        <p class="aviso" style="max-width:44rem;margin-bottom:var(--e-5)"><strong>Um cuidado:</strong> estes exercícios são convites de pausa, não tratamentos. Se algum deles causar desconforto, pare. Em sofrimento intenso, veja <a href="encontrar-ajuda.html">Encontrar ajuda</a>.</p>
+
+        <section class="exercicio" id="ex-respiracao" aria-labelledby="t-resp">
+          <span class="etiqueta">2 minutos</span>
+          <h2 id="t-resp" style="margin-top:var(--e-2)">Respiração guiada</h2>
+          <p>Acompanhe o círculo: inspire enquanto ele cresce, por 4 segundos, e solte o ar enquanto ele diminui, por 6. Se o ritmo não for confortável, respire do seu jeito.</p>
+          <div class="exercicio__palco">
+            <div class="respiro" aria-hidden="true"></div>
+            <p class="palco__fase" aria-live="polite">Quando quiser, comece.</p>
+            <p class="palco__apoio"></p>
+            <div class="acoes"><button class="botao" type="button" data-acao="alternar">Começar</button></div>
+          </div>
+        </section>
+
+        <section class="exercicio" id="ex-sentidos" aria-labelledby="t-sent">
+          <span class="etiqueta">3 minutos</span>
+          <h2 id="t-sent" style="margin-top:var(--e-2)">Atenção aos sentidos</h2>
+          <p>Um jeito de voltar a atenção para o presente, passando por cada um dos cinco sentidos. Avance quando estiver pronto.</p>
+          <div class="exercicio__palco" aria-live="polite">
+            <p class="passo__numero" aria-hidden="true">5</p>
+            <p class="palco__fase"></p>
+            <p class="palco__apoio"></p>
+            <div class="acoes">
+              <button class="botao botao--contorno" type="button" data-acao="anterior">Anterior</button>
+              <button class="botao" type="button" data-acao="proximo">Próximo</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="exercicio" id="ex-pausa" aria-labelledby="t-pausa">
+          <span class="etiqueta">1 minuto</span>
+          <h2 id="t-pausa" style="margin-top:var(--e-2)">Pausa de um minuto</h2>
+          <p>Sessenta segundos sem tarefa nenhuma. Não é preciso esvaziar a mente; basta não fazer nada por um instante.</p>
+          <div class="exercicio__palco">
+            <p class="palco__fase" aria-live="polite">Um minuto, sem tarefa nenhuma.</p>
+            <p class="palco__apoio"></p>
+            <div class="barra" role="progressbar" aria-label="Progresso da pausa" aria-valuemin="0" aria-valuemax="60" aria-valuenow="0"><div class="barra__fio"></div></div>
+            <div class="acoes"><button class="botao" type="button" data-acao="alternar">Começar</button></div>
+          </div>
+        </section>
+
+        <section class="exercicio" id="ex-reflexao" aria-labelledby="t-refl">
+          <span class="etiqueta">Livre</span>
+          <h2 id="t-refl" style="margin-top:var(--e-2)">Uma pergunta para refletir</h2>
+          <p>Fique com a pergunta pelo tempo que quiser. Responda em pensamento ou no papel: este site não guarda o que você escreve.</p>
+          <div class="exercicio__palco">
+            <p class="pergunta" aria-live="polite">Do que eu estou precisando neste momento?</p>
+            <div class="acoes"><button class="botao botao--contorno" type="button" data-acao="outra">Outra pergunta</button></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <aside class="apoio-faixa" aria-label="Apoio imediato">
+    <div class="container">
+      Precisa conversar agora? O <strong>CVV</strong> atende pelo <a href="tel:188">188</a>, gratuitamente, 24 horas. Em emergência médica, ligue <a href="tel:192">192</a> (SAMU). <a href="encontrar-ajuda.html">Ver todos os caminhos de ajuda</a>
+    </div>
+  </aside>
+
+  <footer class="rodape">
+    <div class="container">
+      <div class="rodape__grade">
+        <div>
+          <p class="rodape__marca">Entre Nós</p>
+          <p>Um espaço para cuidar do que sentimos.</p>
+          <p style="margin-top:.75rem;max-width:26rem">Conteúdo informativo. Não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
+        </div>
+        <nav aria-label="Seções">
+          <h2>Navegar</h2>
+          <ul class="rodape__lista">
+            <li><a href="conhecimento.html">Conhecimento</a></li>
+            <li><a href="momentos.html">Momentos</a></li>
+            <li><a href="encontrar-ajuda.html">Encontrar ajuda</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Institucional">
+          <h2>O projeto</h2>
+          <ul class="rodape__lista">
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="privacidade.html">Privacidade</a></li>
+            <li><a href="responsabilidade.html">Responsabilidade editorial</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="rodape__fim">© <span data-ano>2026</span> Entre Nós. Este site não usa cookies nem coleta dados pessoais.</p>
+    </div>
+  </footer>
+</body>
+</html>

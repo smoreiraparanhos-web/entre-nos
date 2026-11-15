@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Artigo — Entre Nós</title>
+  <meta name="description" content="Leitura de artigo da biblioteca do Entre Nós.">
+  <meta name="theme-color" content="#263D32">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Entre Nós">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Artigo — Entre Nós">
+  <meta property="og:description" content="Leitura de artigo da biblioteca do Entre Nós.">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <script src="../js/main.js" defer></script>
+  <script src="../js/navigation.js" defer></script>
+  <script src="../js/data/articles.js" defer></script>
+  <script src="../js/article.js" defer></script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="container topo__linha">
+      <a class="marca" href="../index.html" aria-label="Entre Nós — página inicial"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/><g fill="#DCE6D9"><path d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/></g></svg><span>Entre Nós</span></a>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal">Menu</button>
+      <nav class="nav" id="nav-principal" aria-label="Navegação principal">
+        <ul class="nav__lista">
+            <li><a href="../index.html">Início</a></li>
+            <li><a href="conhecimento.html" aria-current="page">Conhecimento</a></li>
+            <li><a href="momentos.html">Momentos</a></li>
+            <li><a href="encontrar-ajuda.html">Encontrar ajuda</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <div class="container artigo">
+      <p style="margin-bottom:var(--e-4)"><a class="voltar" href="conhecimento.html">← Voltar para Conhecimento</a></p>
+      <article id="artigo"></article>
+      <div class="vazio" id="artigo-ausente" hidden>
+        <h1 style="font-size:var(--t-xl)">Artigo não encontrado</h1>
+        <p style="margin-top:.5rem">O endereço pode estar incompleto ou o conteúdo pode ter sido movido.</p>
+        <div class="acoes"><a class="botao" href="conhecimento.html">Ir para a biblioteca</a></div>
+      </div>
+      <noscript>
+        <div class="vazio">
+          <h1 style="font-size:var(--t-xl)">Esta leitura precisa de JavaScript</h1>
+          <p style="margin-top:.5rem">Os artigos são montados no navegador. Ative o JavaScript para ler, ou volte para a <a href="conhecimento.html">biblioteca</a>.</p>
+        </div>
+      </noscript>
+    </div>
+    <section class="secao secao--areia relacionados" id="relacionados" aria-labelledby="t-rel" hidden>
+      <div class="container">
+        <div class="secao__cabecalho"><h2 id="t-rel">Conteúdos relacionados</h2></div>
+        <div class="grade" id="relacionados-lista"></div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="apoio-faixa" aria-label="Apoio imediato">
+    <div class="container">
+      Precisa conversar agora? O <strong>CVV</strong> atende pelo <a href="tel:188">188</a>, gratuitamente, 24 horas. Em emergência médica, ligue <a href="tel:192">192</a> (SAMU). <a href="encontrar-ajuda.html">Ver todos os caminhos de ajuda</a>
+    </div>
+  </aside>
+
+  <footer class="rodape">
+    <div class="container">
+      <div class="rodape__grade">
+        <div>
+          <p class="rodape__marca">Entre Nós</p>
+          <p>Um espaço para cuidar do que sentimos.</p>
+          <p style="margin-top:.75rem;max-width:26rem">Conteúdo informativo. Não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
+        </div>
+        <nav aria-label="Seções">
+          <h2>Navegar</h2>
+          <ul class="rodape__lista">
+            <li><a href="conhecimento.html">Conhecimento</a></li>
+            <li><a href="momentos.html">Momentos</a></li>
+            <li><a href="encontrar-ajuda.html">Encontrar ajuda</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Institucional">
+          <h2>O projeto</h2>
+          <ul class="rodape__lista">
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="privacidade.html">Privacidade</a></li>
+            <li><a href="responsabilidade.html">Responsabilidade editorial</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="rodape__fim">© <span data-ano>2026</span> Entre Nós. Este site não usa cookies nem coleta dados pessoais.</p>
+    </div>
+  </footer>
+</body>
+</html>

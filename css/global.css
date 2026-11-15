@@ -1,0 +1,65 @@
+/* Base: tipografia, layout e elementos globais */
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--fonte-texto);
+  font-size: var(--t-base);
+  line-height: 1.65;
+  color: var(--texto);
+  background: var(--branco-natural);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main { flex: 1; }
+h1, h2, h3, h4 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--verde-floresta);
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-3xl); letter-spacing: -0.01em; }
+h2 { font-size: var(--t-2xl); }
+h3 { font-size: var(--t-lg); }
+p { text-wrap: pretty; }
+a { color: var(--verde-natural); text-underline-offset: 0.18em; text-decoration-thickness: 1px; transition: color var(--transicao); }
+a:hover { color: var(--verde-floresta); }
+:focus-visible { outline: 3px solid var(--marrom-terroso); outline-offset: 3px; border-radius: 4px; }
+::selection { background: var(--verde-suave); }
+
+.container { width: 100%; max-width: var(--largura); margin-inline: auto; padding-inline: var(--e-4); }
+.secao { padding-block: var(--e-7); }
+.secao--areia { background: var(--areia); }
+.secao--verde { background: var(--verde-suave); }
+.secao__cabecalho { max-width: 40rem; margin-bottom: var(--e-5); }
+.secao__cabecalho p { margin-top: var(--e-2); color: var(--texto-suave); }
+.sobretitulo {
+  display: block; margin-bottom: var(--e-2);
+  font-family: var(--fonte-texto); font-size: var(--t-xs); font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--marrom-terroso);
+}
+.lead { font-size: var(--t-lg); color: var(--texto-suave); max-width: 38rem; }
+.grade { display: grid; gap: var(--e-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.pular {
+  position: absolute; left: var(--e-3); top: -4rem; z-index: 100;
+  background: var(--verde-floresta); color: #fff; padding: var(--e-2) var(--e-3); border-radius: var(--raio);
+}
+.pular:focus { top: var(--e-3); color: #fff; }
+
+/* Texto longo (artigos e páginas institucionais) */
+.prosa { max-width: var(--largura-leitura); }
+.prosa > * + * { margin-top: var(--e-3); }
+.prosa h2 { font-size: var(--t-xl); margin-top: var(--e-6); }
+.prosa h3 { margin-top: var(--e-5); }
+.prosa ul, .prosa ol { padding-left: 1.3em; }
+.prosa li + li { margin-top: var(--e-1); }
+.prosa li::marker { color: var(--verde-natural); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
