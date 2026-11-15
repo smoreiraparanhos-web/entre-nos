@@ -65,8 +65,8 @@ Editar um HTML gerado à mão funciona, mas a mudança se perde na próxima exec
 
 ## Pendências
 
-- [ ] **Revisão profissional dos 7 artigos.** Todos exibem "Conteúdo em revisão".
-- [ ] **Conferir os links das fontes** (OMS, Ministério da Saúde, CVV): não foram verificados.
+- [ ] **Revisão profissional dos 13 artigos.** Todos exibem "Conteúdo em revisão".
+- [ ] **Conferir os links das fontes** (OMS, Ministério da Saúde, CVV, APA, NHS): não foram verificados.
 - [ ] **Conferir contatos e condições** de CVV (188), SAMU (192), CAPS e UBS.
 - [ ] **Autoria:** hoje "Equipe Entre Nós". Definir a autoria real e decidir como informar o processo de redação.
 - [ ] **Fotografias de natureza** com licença verificada, seguindo a direção fotográfica do projeto.

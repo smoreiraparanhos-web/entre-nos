@@ -155,7 +155,35 @@
     });
   }
 
+  /* 5. Uma palavra para hoje: frases de ânimo, sem promessas. */
+  function palavra() {
+    var raiz = document.getElementById('ex-palavra');
+    if (!raiz) return;
+    var frases = [
+      'Hoje não precisa ser um dia bom. Basta ser um dia possível.',
+      'Você já atravessou dias que pareciam não ter fim. Eles tiveram.',
+      'Descansar não é perder tempo. É parte do caminho.',
+      'O que você sente agora é real, e não é tudo o que você é.',
+      'Um passo pequeno ainda é um passo.',
+      'Pedir ajuda é um jeito de continuar, não de desistir.',
+      'Você não precisa dar conta de tudo hoje. Só da próxima coisa.',
+      'Dias difíceis não apagam o que você já construiu.',
+      'Ir devagar também é ir.',
+      'Você merece o mesmo cuidado que oferece aos outros.',
+      'Nem todo dia rende. Alguns só precisam ser atravessados.',
+      'Tem gente que fica melhor porque você existe, mesmo quando você não percebe.'
+    ];
+    var alvo = raiz.querySelector('.pergunta');
+    var botao = raiz.querySelector('[data-acao="outra"]');
+    var i = Math.floor(Math.random() * frases.length);
+    alvo.textContent = frases[i];
+    botao.addEventListener('click', function () {
+      i = (i + 1) % frases.length;
+      alvo.textContent = frases[i];
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
-    respiracao(); sentidos(); pausa(); reflexao();
+    respiracao(); sentidos(); pausa(); reflexao(); palavra();
   });
 })();

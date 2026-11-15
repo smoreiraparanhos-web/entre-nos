@@ -27,6 +27,10 @@ F = {
     "oms_suicidio": {"nome": "Organização Mundial da Saúde (OMS). Suicide — ficha informativa.", "url": "https://www.who.int/news-room/fact-sheets/detail/suicide"},
     "ms_depressao": {"nome": "Ministério da Saúde. Depressão — Saúde de A a Z.", "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/d/depressao"},
     "ms_saude_mental": {"nome": "Ministério da Saúde. Saúde mental — Saúde de A a Z.", "url": "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-mental"},
+    "oms_estresse": {"nome": "Organização Mundial da Saúde (OMS). Doing What Matters in Times of Stress: An Illustrated Guide (2020).", "url": "https://www.who.int/publications/i/item/9789240003927"},
+    "oms_atividade": {"nome": "Organização Mundial da Saúde (OMS). Physical activity — ficha informativa.", "url": "https://www.who.int/news-room/fact-sheets/detail/physical-activity"},
+    "apa_raiva": {"nome": "American Psychological Association (APA). Control anger before it controls you.", "url": "https://www.apa.org/topics/anger/control"},
+    "nhs_raiva": {"nome": "National Health Service (NHS, Reino Unido). Get help with anger.", "url": "https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/feelings-and-symptoms/anger/"},
     "cvv": {"nome": "Centro de Valorização da Vida (CVV).", "url": "https://cvv.org.br/"},
 }
 
@@ -160,6 +164,166 @@ artigo("como-apoiar-alguem", "Como apoiar alguém que está passando por dificul
   ("Cuidar de quem cuida", [
    "Apoiar alguém também cansa. Você não precisa dar conta sozinho nem ter todas as respostas. Dividir o cuidado com outras pessoas e ter o seu próprio espaço de apoio é o que permite continuar presente."])],
  ["oms_suicidio", "oms_depressao", "cvv"]),
+
+artigo("depressao-causas-e-o-que-agrava", "Depressão: o que é, de onde vem e o que pode agravar", "depressao", 6,
+ "A depressão não tem uma causa única nem um único jeito de aparecer. Entender as formas que ela assume, de onde costuma vir e o que tende a piorá-la ajuda a reconhecer o problema sem culpa.",
+ [("O que é", [
+   "A depressão é uma condição de saúde comum, diferente da tristeza do dia a dia. Segundo a Organização Mundial da Saúde, ela envolve humor deprimido ou perda de prazer e interesse pelas atividades, na maior parte do dia, quase todos os dias, por pelo menos duas semanas.",
+   "Ela pode atingir qualquer pessoa e, de acordo com a OMS, é mais frequente em mulheres do que em homens. Não é fraqueza de caráter nem falta de força de vontade."]),
+  ("As formas que ela pode assumir", [
+   "A OMS descreve padrões diferentes de episódios depressivos:",
+   ["Episódio único: a pessoa tem um primeiro e único episódio.",
+    "Transtorno depressivo recorrente: a pessoa já teve pelo menos dois episódios ao longo da vida.",
+    "Transtorno bipolar: os episódios depressivos se alternam com períodos de mania, marcados por euforia ou irritabilidade, energia aumentada, fala acelerada e menor necessidade de sono."],
+   "Um episódio também pode ser classificado como leve, moderado ou grave, conforme a quantidade e a intensidade dos sintomas e o impacto na vida da pessoa. Essa distinção muda o tratamento indicado, e só um profissional pode fazê-la."]),
+  ("Condições que costumam andar junto", [
+   "A depressão raramente aparece isolada da vida da pessoa. Ela está ligada à saúde física nos dois sentidos: muitos dos fatores que influenciam a depressão, como o sedentarismo e o uso nocivo de álcool, também são fatores de risco para doenças cardiovasculares, câncer, diabetes e doenças respiratórias. E quem convive com essas doenças pode desenvolver depressão pelas dificuldades de lidar com a própria condição.",
+   "Sintomas de ansiedade também são frequentes em quem tem depressão. Por isso a avaliação profissional olha para o conjunto, e não para um sintoma isolado."]),
+  ("De onde ela vem", [
+   "Não existe uma causa única. A OMS descreve a depressão como resultado de uma interação entre fatores sociais, psicológicos e biológicos.",
+   ["Acontecimentos difíceis: desemprego, luto, separações, violência e outras experiências traumáticas aumentam a chance de desenvolver depressão.",
+    "Condições de vida: sobrecarga prolongada, dificuldades financeiras e falta de apoio pesam ao longo do tempo.",
+    "Fatores biológicos: histórico familiar e doenças físicas podem contribuir."],
+   "Ter um desses fatores não significa que a pessoa vai adoecer, e é possível ter depressão sem um motivo aparente. Procurar uma explicação única costuma gerar mais culpa do que clareza."]),
+  ("O que pode agravar", [
+   "Alguns hábitos e situações tendem a aprofundar o quadro. As orientações de autocuidado da OMS apontam justamente para o contrário deles:",
+   ["Isolar-se. Afastar-se de amigos e familiares tira um dos apoios que mais protegem.",
+    "Álcool e outras drogas. Podem aliviar por algumas horas e pioram o humor e o sono em seguida.",
+    "Sono e alimentação desregulados. Dormir e comer em horários muito irregulares deixa o corpo com menos recursos.",
+    "Parar de se movimentar. Abandonar toda atividade física tende a reduzir ainda mais a energia.",
+    "Abandonar o que dava prazer. Deixar de fazer o que antes fazia bem alimenta o ciclo de desânimo.",
+    "Guardar tudo para si. Não falar com ninguém de confiança adia o pedido de ajuda."],
+   "Um aviso importante: quem faz tratamento não deve interromper a medicação por conta própria. Qualquer mudança precisa ser combinada com o médico."]),
+  ("O que fazer com essa informação", [
+   "Reconhecer os fatores que agravam não é motivo para se cobrar. Na depressão, justamente o que ajudaria fica mais difícil de fazer, e isso é parte do quadro, não preguiça.",
+   "Se você se reconheceu neste texto, o próximo passo é uma conversa com um profissional de saúde. Veja o que fazer na leitura seguinte. Se houver pensamentos de morte ou de se machucar, ligue agora para o CVV no 188 (gratuito, 24 horas)."])],
+ ["oms_depressao", "ms_depressao", "cvv"]),
+
+artigo("depressao-o-que-fazer", "Depressão: o que fazer", "depressao", 5,
+ "Quando a depressão aparece, até decidir por onde começar cansa. Este é um roteiro em passos pequenos, para quem está passando por isso e para quem acompanha alguém.",
+ [("Primeiro: procurar uma avaliação", [
+   "Depressão tem tratamento, e ele começa por uma avaliação profissional. Você não precisa ter certeza do que tem para marcar uma consulta. Dizer “não estou bem há semanas” já basta.",
+   ["Pelo SUS, a porta de entrada é a Unidade Básica de Saúde (UBS).",
+    "Em sofrimento intenso, o Centro de Atenção Psicossocial (CAPS) costuma receber sem encaminhamento.",
+    "Pelo plano de saúde ou em atendimento particular, procure um psicólogo ou um psiquiatra."]]),
+  ("Como é o tratamento", [
+   "Segundo a Organização Mundial da Saúde, existem tratamentos eficazes para a depressão. Os principais são:",
+   ["Psicoterapia. É o primeiro tratamento indicado e ajuda a pessoa a rever formas de pensar, de lidar com as situações e de se relacionar.",
+    "Medicação antidepressiva. Pode ser indicada por um médico, combinada com a psicoterapia, nos quadros moderados e graves. A OMS afirma que ela não é necessária na depressão leve."],
+   "O efeito não é imediato e o tratamento pode precisar de ajustes. Isso é esperado e não significa que não está funcionando. Nunca comece, mude ou interrompa um remédio sem orientação médica."]),
+  ("O que ajuda no dia a dia", [
+   "Estas atitudes não substituem o tratamento, mas caminham junto com ele. Estão entre as orientações de autocuidado da OMS:",
+   ["Tentar manter atividades de que você gostava, mesmo sem vontade.",
+    "Ficar em contato com amigos e familiares.",
+    "Movimentar o corpo com regularidade, ainda que seja uma caminhada curta.",
+    "Manter horários regulares para dormir e para comer, na medida do possível.",
+    "Evitar ou reduzir o álcool e não usar drogas ilícitas.",
+    "Falar sobre o que sente com alguém de confiança."],
+   "Escolha uma só para começar. Em um dia difícil, fazer metade já conta."]),
+  ("Quando o dia está pesado demais", [
+   ["Reduza a meta. Em vez de “arrumar a casa”, lavar um copo. Em vez de “fazer exercício”, ir até a esquina.",
+    "Adie as decisões grandes. A depressão distorce a avaliação que a gente faz de si e do futuro.",
+    "Avise alguém. Uma mensagem curta, como “hoje está difícil”, já tira você do isolamento.",
+    "Lembre que o estado de hoje não é permanente, mesmo que pareça."]]),
+  ("Se é outra pessoa que está passando por isso", [
+   "Escute sem tentar consertar, evite frases como “é só reagir” e ofereça ajuda prática: marcar a consulta, acompanhar até lá, fazer companhia. Respeitar o ritmo da pessoa não é desistir dela."]),
+  ("Em situação de risco", [
+   "Se houver pensamentos de morte ou de se machucar, não espere a consulta. Ligue para o CVV no 188 (gratuito, 24 horas) ou vá a um serviço de emergência. Em risco imediato, ligue para o SAMU no 192."])],
+ ["oms_depressao", "ms_depressao", "ms_saude_mental", "cvv"]),
+
+artigo("caminhar-com-a-ansiedade", "Caminhar com a ansiedade em vez de lutar contra ela", "ansiedade", 5,
+ "Tentar expulsar a ansiedade costuma deixá-la maior. Existe outro caminho: abrir espaço para ela, seguir fazendo o que importa e observar o que ela aponta.",
+ [("Por que lutar não funciona", [
+   "Quando a ansiedade aparece, a reação mais comum é tentar se livrar dela: evitar a situação, distrair-se a qualquer custo, brigar com os próprios pensamentos. O alívio vem rápido e dura pouco.",
+   "A evitação é uma das marcas da ansiedade descritas pela Organização Mundial da Saúde. Cada vez que a gente foge do que assusta, a vida fica um pouco menor e o medo, um pouco mais convincente."]),
+  ("Ir junto, em vez de ir contra", [
+   "O guia da OMS para momentos de estresse propõe uma ideia simples: em vez de lutar contra pensamentos e sentimentos difíceis, abrir espaço para eles. Isso não quer dizer gostar da ansiedade nem se render a ela. Quer dizer deixar que ela esteja ali enquanto você continua fazendo o que é importante para você.",
+   "Na prática, o guia descreve passos como estes:",
+   ["Notar e nomear. Dizer para si: “estou percebendo ansiedade” ou “aqui está o aperto no peito”. Dar nome cria uma pequena distância.",
+    "Ancorar-se. Voltar a atenção para o presente: os pés no chão, o que você vê e ouve, a tarefa que está diante de você.",
+    "Abrir espaço. Observar a sensação com curiosidade, respirar ao redor dela e permitir que ela venha e vá no próprio tempo.",
+    "Agir conforme o que importa. Perguntar qual pequeno passo você daria agora se a ansiedade não estivesse no comando, e dar esse passo com ela junto."]]),
+  ("O que ela pode estar apontando", [
+   "A ansiedade costuma aparecer perto do que tem valor para a gente. Ninguém fica ansioso com o que não importa. Depois que a onda passa, vale perguntar:",
+   ["O que eu estava tentando proteger?", "Do que isso me mostra que eu preciso?", "Há algo que eu venho adiando e que pede uma decisão?", "O que eu consegui fazer mesmo com ela presente?"],
+   "Às vezes a resposta revela algo útil: um limite ultrapassado, uma conversa pendente, um ritmo insustentável. E atravessar uma situação temida, em vez de evitá-la, ensina uma coisa que nenhum conselho ensina: que você aguenta mais do que o medo dizia."]),
+  ("Um cuidado necessário", [
+   "Nem toda ansiedade traz uma lição, e ninguém precisa procurar sentido em um sofrimento intenso. Se a ansiedade é forte, dura semanas ou impede você de trabalhar, estudar, dormir ou sair de casa, ir junto com ela inclui procurar ajuda.",
+   "Os transtornos de ansiedade têm tratamento eficaz, com psicoterapia e, em alguns casos, medicação prescrita por médico. Em uma crise, o CVV atende pelo 188, gratuitamente, 24 horas."])],
+ ["oms_estresse", "oms_ansiedade", "cvv"]),
+
+artigo("como-lidar-com-a-raiva", "Como lidar com a raiva", "cotidiano", 5,
+ "A raiva é uma emoção normal e, muitas vezes, justa. O problema raramente é senti-la. É o que a gente faz nos segundos seguintes.",
+ [("Raiva não é defeito", [
+   "A raiva aparece quando algo é percebido como injusto, ameaçador ou frustrante. Ela prepara o corpo para reagir: o coração acelera, os músculos tensionam, a respiração encurta. Sentir isso não faz de ninguém uma pessoa ruim.",
+   "A raiva pede atenção quando é muito frequente, muito intensa, sai em forma de agressão ou deixa arrependimento depois."]),
+  ("Reconhecer os sinais antes do pico", [
+   "Quase sempre o corpo avisa antes da explosão. Aprender os seus sinais dá alguns segundos de vantagem:",
+   ["Calor no rosto e no peito.", "Mandíbula, ombros ou punhos tensos.", "Respiração curta e coração acelerado.", "Pensamentos em termos absolutos, como “sempre” e “nunca”."]]),
+  ("O que fazer na hora", [
+   ["Pausar antes de responder. Contar até dez ou dizer “preciso de um minuto” não é fugir da conversa, é adiá-la para quando você puder tê-la.",
+    "Soltar o ar devagar. Expirar por mais tempo do que inspirar ajuda o corpo a desacelerar.",
+    "Sair do ambiente, se for possível, e voltar depois.",
+    "Movimentar o corpo. Uma caminhada rápida gasta parte da energia que a raiva mobilizou.",
+    "Não decidir nem escrever nada no pico. Mensagens e decisões podem esperar vinte minutos."]]),
+  ("Depois que baixar", [
+   "Com o corpo mais calmo, a raiva vira informação. Vale se perguntar o que exatamente incomodou e se havia outra coisa por baixo, como cansaço, medo, mágoa ou sensação de desrespeito.",
+   ["Fale do que você sentiu e do que precisa, em vez de acusar: “eu fiquei irritado quando…” no lugar de “você sempre…”.",
+    "Escolha um ponto por vez. Trazer queixas antigas costuma virar briga.",
+    "Observe os gatilhos repetidos. Sono ruim, fome, sobrecarga e álcool encurtam o pavio de qualquer pessoa."],
+   "Engolir a raiva o tempo todo também tem custo. O objetivo não é deixar de sentir, e sim conseguir expressar com firmeza e sem agressão."]),
+  ("Quando procurar ajuda", [
+   "Procure um profissional de saúde se a raiva leva a agressões, a quebrar objetos, a prejuízos no trabalho ou nos relacionamentos, ou se você sente que perde o controle. Irritabilidade persistente também pode estar ligada a depressão, ansiedade ou esgotamento.",
+   "Se houver risco de machucar alguém ou a si mesmo, afaste-se da situação e peça ajuda imediatamente: 188 (CVV) ou 192 (SAMU)."])],
+ ["apa_raiva", "nhs_raiva", "cvv"]),
+
+artigo("paciencia-e-calma", "Paciência e calma: como funcionam e como se treinam", "autoconhecimento", 4,
+ "Calma não é um traço que algumas pessoas têm e outras não. É um estado do corpo, e existem maneiras conhecidas de chegar até ele.",
+ [("O que acontece no corpo", [
+   "Diante de uma ameaça ou de uma pressão, o corpo entra em estado de alerta: o coração acelera, a respiração encurta e a atenção se estreita. É uma reação útil para emergências e desgastante quando fica ligada o dia inteiro.",
+   "Calma é o caminho de volta desse alerta. Ela não depende de a situação estar resolvida. Depende de o corpo receber sinais de que pode desacelerar."]),
+  ("E a paciência?", [
+   "Paciência é a capacidade de tolerar a espera, o desconforto e a lentidão sem agir no impulso. Ela não é passividade nem engolir tudo calado. É o intervalo entre sentir e reagir, e esse intervalo pode ser alargado com prática.",
+   "Ter pouca paciência em uma fase de cansaço, dor ou sobrecarga é esperado. Paciência gasta energia, e quem está no limite tem menos para gastar."]),
+  ("Maneiras de voltar à calma", [
+   "O guia da Organização Mundial da Saúde para momentos de estresse reúne técnicas simples, que funcionam melhor quando praticadas também fora das crises:",
+   ["Desacelerar a respiração, soltando o ar devagar.",
+    "Ancorar-se no presente: sentir os pés no chão, notar o que você vê e ouve.",
+    "Dar atenção inteira ao que está fazendo, uma coisa de cada vez.",
+    "Notar os pensamentos difíceis sem brigar com eles."],
+   "Você pode experimentar duas delas agora, na seção Momentos deste site: a respiração guiada e a atenção aos sentidos."]),
+  ("Como se treina paciência", [
+   ["Comece pelas esperas pequenas. A fila e o semáforo são treinos de baixo risco.",
+    "Dê nome ao impulso: “estou com pressa”, “quero responder agora”. Nomear cria um segundo de escolha.",
+    "Reduza o que encurta o pavio: pouco sono, fome, excesso de tarefas e de telas.",
+    "Troque a pergunta. Em vez de “por que isso está demorando?”, “o que eu posso fazer enquanto isso?”.",
+    "Tenha paciência também com você. Mudança de hábito leva tempo e inclui recaídas."]]),
+  ("O limite deste texto", [
+   "Estas práticas ajudam no estresse do dia a dia. Se a agitação, a irritabilidade ou a tensão são constantes e atrapalham a sua vida, pode haver algo mais a cuidar, e vale conversar com um profissional de saúde."])],
+ ["oms_estresse", "oms_saude_mental"]),
+
+artigo("o-que-pode-melhorar-o-seu-dia", "Pequenas coisas que podem melhorar o seu dia", "cotidiano", 4,
+ "Nenhuma delas resolve um problema grande. Mas, somadas, costumam deixar o dia um pouco mais leve, e às vezes é disso que a gente precisa para dar o passo seguinte.",
+ [(None, [
+   "Estas sugestões se apoiam em orientações da Organização Mundial da Saúde sobre autocuidado e atividade física. Não são uma lista de obrigações. Escolha uma e veja como se sente."]),
+  ("Para o corpo", [
+   ["Mexer-se um pouco. Segundo a OMS, a atividade física regular reduz sintomas de depressão e de ansiedade, e qualquer quantidade é melhor do que nenhuma. Dez minutos de caminhada contam.",
+    "Cuidar do sono. Horários parecidos para dormir e acordar ajudam mais do que tentar compensar no fim de semana.",
+    "Comer em horários regulares. Ficar muitas horas sem comer deixa o humor mais frágil.",
+    "Ir com calma no álcool. Ele costuma piorar o sono e o ânimo do dia seguinte."]]),
+  ("Para a cabeça", [
+   ["Fazer uma coisa de cada vez, com atenção inteira.",
+    "Concluir uma tarefa pequena. Arrumar a cama ou responder uma mensagem pendente dá a sensação de movimento.",
+    "Fazer uma pausa curta, sem tela. Um minuto já muda o ritmo.",
+    "Reduzir a exposição a notícias e redes quando elas estiverem pesando."]]),
+  ("Para o coração", [
+   ["Falar com alguém. Uma mensagem para quem você gosta já quebra o isolamento.",
+    "Fazer algo de que você gostava, mesmo sem muita vontade. A vontade costuma vir depois de começar.",
+    "Fazer uma gentileza pequena, para outra pessoa ou para você.",
+    "Notar uma coisa boa do dia, por menor que seja."]]),
+  ("Se nada disso ajuda", [
+   "Há fases em que nem as coisas pequenas cabem, e isso não é falha sua. Se o desânimo dura semanas ou o dia a dia está pesado demais, o que pode melhorar o seu dia é pedir ajuda: uma Unidade Básica de Saúde, um CAPS, um profissional de saúde mental ou o CVV, pelo 188."])],
+ ["oms_depressao", "oms_atividade", "oms_estresse", "cvv"]),
 ]
 
 # =====================================================================
@@ -364,6 +528,7 @@ SINAIS = [
     ("A fase está difícil e você não sabe o que fazer com isso.", "periodos-dificeis"),
     ("Você pensa em procurar ajuda, mas não sabe por onde começar.", "como-procurar-ajuda-psicologica"),
     ("Alguém de quem você gosta não está bem.", "como-apoiar-alguem"),
+    ("A raiva sai antes de você conseguir pensar.", "como-lidar-com-a-raiva"),
 ]
 sinais = "\n".join(
     f'          <li><a href="{{{{u:{url_artigo(por_slug(s))}}}}}"><span>{e(frase)}</span><small>{e(CATEGORIAS[por_slug(s)["categoria"]])} · {por_slug(s)["leitura"]} min</small></a></li>'
@@ -397,7 +562,7 @@ pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
         <div>
           <span class="sobretitulo">Um espaço para cuidar do que sentimos</span>
           <h1>Você não precisa estar bem <em>o tempo todo</em>.</h1>
-          <p class="lead">Leituras de quatro minutos para entender o que você sente, pausas de um minuto para respirar e caminhos gratuitos de ajuda.</p>
+          <p class="lead">Leituras de poucos minutos para entender o que você sente, pausas de um minuto para respirar e caminhos gratuitos de ajuda.</p>
           <div class="acoes">
             <a class="botao" href="{{{{u:pages/conhecimento.html}}}}">Entender o que sinto</a>
             <a class="botao botao--contorno" href="{{{{u:pages/momentos.html}}}}">Fazer uma pausa agora</a>
@@ -450,7 +615,7 @@ pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
           <li class="caminho">
             <span class="caminho__num" aria-hidden="true">02</span>
             <h3><a href="{{{{u:pages/momentos.html}}}}">Pausar</a></h3>
-            <p>Quatro exercícios guiados de respiração, atenção e reflexão. O mais curto leva um minuto.</p>
+            <p>Exercícios guiados de respiração, atenção e reflexão. O mais curto leva um minuto.</p>
             <span class="caminho__seta" aria-hidden="true">→</span>
           </li>
           <li class="caminho">
@@ -570,7 +735,7 @@ pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
         <div>
           <span class="sobretitulo">Para hoje</span>
           <h2 id="t-apoio">Comece pelo que couber no seu dia</h2>
-          <p>Não precisa resolver tudo de uma vez. Uma leitura de quatro minutos ou uma pausa de um já é um começo.</p>
+          <p>Não precisa resolver tudo de uma vez. Uma leitura curta ou uma pausa de um minuto já é um começo.</p>
           <div class="acoes">
             <a class="botao" href="{{{{u:pages/conhecimento.html}}}}">Escolher uma leitura</a>
             <a class="botao botao--contorno" href="{{{{u:pages/momentos.html}}}}">Fazer uma pausa agora</a>
@@ -722,9 +887,10 @@ sumario = '''
           <a href="#ex-sentidos">Atenção aos sentidos <small>3 min</small></a>
           <a href="#ex-pausa">Pausa de um minuto <small>1 min</small></a>
           <a href="#ex-reflexao">Uma pergunta <small>livre</small></a>
+          <a href="#ex-palavra">Uma palavra para hoje <small>livre</small></a>
         </nav>'''
 pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de respiração, atenção aos sentidos, pausa e reflexão. Nada é registrado.",
- cabecalho("Momentos", "Um momento para mim", "Quatro pausas de um a três minutos, para quando a cabeça não para. Nada do que você fizer aqui é registrado.", sumario) + '''
+ cabecalho("Momentos", "Um momento para mim", "Pausas de um a três minutos, para quando a cabeça não para, e palavras para os dias sem ânimo. Nada do que você fizer aqui é registrado.", sumario) + '''
     <section class="secao">
       <div class="container">
         <p class="aviso" style="max-width:46rem;margin-bottom:var(--e-6)"><strong>Um cuidado:</strong> estes exercícios são convites de pausa, não tratamentos. Se algum deles causar desconforto, pare. Em sofrimento intenso, veja <a href="{{u:pages/encontrar-ajuda.html}}">Encontrar ajuda</a>.</p>
@@ -783,6 +949,19 @@ pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de res
           <div class="exercicio__palco">
             <p class="pergunta" aria-live="polite">Do que eu estou precisando neste momento?</p>
             <div class="acoes"><button class="botao botao--contorno" type="button" data-acao="outra">Outra pergunta</button></div>
+          </div>
+        </section>
+
+        <section class="exercicio" id="ex-palavra" aria-labelledby="t-palavra">
+          <div class="exercicio__texto">
+            <span class="etiqueta">Sem tempo marcado</span>
+            <h2 id="t-palavra">Uma palavra para hoje</h2>
+            <p>Frases curtas para os dias em que falta ânimo. Elas não resolvem nada sozinhas, mas às vezes ajudam a dar o próximo passo.</p>
+            <p style="margin-top:var(--e-3)"><a class="link-seta" href="{{u:pages/artigos/o-que-pode-melhorar-o-seu-dia.html}}">Pequenas coisas que podem melhorar o seu dia</a></p>
+          </div>
+          <div class="exercicio__palco">
+            <p class="pergunta" aria-live="polite">Hoje não precisa ser um dia bom. Basta ser um dia possível.</p>
+            <div class="acoes"><button class="botao botao--contorno" type="button" data-acao="outra">Outra frase</button></div>
           </div>
         </section>
       </div>
