@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Gera as páginas estáticas do Entre Nós (cabeçalho e rodapé compartilhados)."""
-import json, sys, html
+import json, sys, html, re
 from pathlib import Path
 
 RAIZ = Path(sys.argv[1])
@@ -162,27 +162,69 @@ artigo("como-apoiar-alguem", "Como apoiar alguém que está passando por dificul
  ["oms_suicidio", "oms_depressao", "cvv"]),
 ]
 
+# =====================================================================
+# Configuração do site
+# =====================================================================
+SITE_URL = "https://smoreiraparanhos-web.github.io/entre-nos/"   # endereço público (canônico, sitemap)
+BASE_PATH = "/entre-nos/"                                         # subcaminho no GitHub Pages (usado só no 404)
+# Imagem principal do início. Para usar uma fotografia, coloque o arquivo em assets/images/
+# e troque os valores abaixo (arquivo, descrição e crédito).
+HERO = {"arquivo": "hero.svg", "alt": "", "credito": ""}
+
+import re
+CONTEUDO = Path(__file__).parent / "conteudo"
 e = html.escape
-FOLHA = '<path d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/>'
-MARCA_SVG = f'<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/><g fill="#DCE6D9">{FOLHA}</g></svg>'
+MESES = "janeiro fevereiro março abril maio junho julho agosto setembro outubro novembro dezembro".split()
+
+def data_extenso(iso):
+    a, m, d = iso.split("-")
+    return f"{int(d)} de {MESES[int(m) - 1]} de {a}"
+
+def url_artigo(a):
+    return f"pages/artigos/{a['slug']}.html"
+
+def situacao(a):
+    if a["revisado"]:
+        return '<span class="situacao situacao--revisado">Revisado por profissional</span>'
+    return '<span class="situacao">Aguardando revisão profissional</span>'
+
+POR_CATEGORIA = {k: [a for a in ARTIGOS if a["categoria"] == k] for k in CATEGORIAS}
+
+MARCA_SVG = ('<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/>'
+             '<path fill="#DCE6D9" d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/></svg>')
 
 NAV = [("inicio", "Início", "index.html"), ("conhecimento", "Conhecimento", "pages/conhecimento.html"),
        ("momentos", "Momentos", "pages/momentos.html"), ("ajuda", "Encontrar ajuda", "pages/encontrar-ajuda.html"),
        ("sobre", "Sobre", "pages/sobre.html")]
 
-def pagina(caminho, titulo, descricao, corpo, atual=None, scripts=()):
-    na_raiz = "/" not in caminho
-    r = "" if na_raiz else "../"
-    def u(destino):  # destino relativo à raiz do site
-        return destino if na_raiz else ("../" + destino if not destino.startswith("pages/") else destino[len("pages/"):])
-    corpo = corpo.replace("{{r}}", r)
-    for chave in ("index.html", "pages/conhecimento.html", "pages/artigo.html", "pages/momentos.html",
-                  "pages/encontrar-ajuda.html", "pages/sobre.html", "pages/privacidade.html", "pages/responsabilidade.html"):
-        corpo = corpo.replace("{{" + chave + "}}", u(chave))
+GERADAS = []  # (caminho, indexável) — usado no sitemap
+
+def pagina(caminho, titulo, descricao, corpo, atual=None, scripts=(), faixa=True, indexar=True, json_ld=None, base=None):
+    """Escreve uma página completa. No corpo, {{u:caminho/desde/a/raiz}} vira um link relativo correto."""
+    r = "" if base else "../" * caminho.count("/")
+    u = lambda destino: r + destino
+    corpo = re.sub(r"\{\{u:([^}]*)\}\}", lambda m: u(m.group(1)), corpo)
     itens = "\n".join(
         f'            <li><a href="{u(h)}"{" aria-current=\"page\"" if k == atual else ""}>{n}</a></li>' for k, n, h in NAV)
     tags = "\n".join(f'  <script src="{r}js/{s}" defer></script>' for s in ("main.js", "navigation.js") + tuple(scripts))
     titulo_completo = titulo if "Entre Nós" in titulo else f"{titulo} — Entre Nós"
+    canonica = SITE_URL + ("" if caminho == "index.html" else caminho)
+    extras = ""
+    if base:
+        extras += f'  <base href="{base}">\n'
+    if indexar:
+        extras += f'  <link rel="canonical" href="{canonica}">\n  <meta property="og:url" content="{canonica}">\n'
+    else:
+        extras += '  <meta name="robots" content="noindex">\n'
+    if json_ld:
+        extras += '  <script type="application/ld+json">' + json.dumps(json_ld, ensure_ascii=False) + '</script>\n'
+    faixa_html = f'''
+  <aside class="apoio-faixa" aria-label="Apoio imediato">
+    <div class="container">
+      Precisa conversar agora? O <strong>CVV</strong> atende pelo <a href="tel:188">188</a>, gratuitamente, 24 horas. Em emergência médica, ligue <a href="tel:192">192</a> (SAMU). <a href="{u("pages/encontrar-ajuda.html")}">Ver todos os caminhos de ajuda</a>
+    </div>
+  </aside>
+''' if faixa else ""
     doc = f'''<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -191,12 +233,15 @@ def pagina(caminho, titulo, descricao, corpo, atual=None, scripts=()):
   <title>{e(titulo_completo)}</title>
   <meta name="description" content="{e(descricao)}">
   <meta name="theme-color" content="#263D32">
-  <meta property="og:type" content="website">
+{extras}  <meta property="og:type" content="{"article" if json_ld else "website"}">
   <meta property="og:site_name" content="Entre Nós">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="{e(titulo_completo)}">
   <meta property="og:description" content="{e(descricao)}">
+  <meta property="og:image" content="{SITE_URL}assets/images/compartilhar.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="{r}assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="{r}assets/fonts/newsreader-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{r}css/reset.css">
   <link rel="stylesheet" href="{r}css/variables.css">
   <link rel="stylesheet" href="{r}css/global.css">
@@ -205,37 +250,32 @@ def pagina(caminho, titulo, descricao, corpo, atual=None, scripts=()):
 {tags}
 </head>
 <body>
-  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <a class="pular" href="{"" if not base else caminho}#conteudo">Pular para o conteúdo</a>
 
   <header class="topo">
     <div class="container topo__linha">
       <a class="marca" href="{u("index.html")}" aria-label="Entre Nós — página inicial">{MARCA_SVG}<span>Entre Nós</span></a>
-      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal">Menu</button>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal"><span class="menu-botao__icone" aria-hidden="true"></span>Menu</button>
       <nav class="nav" id="nav-principal" aria-label="Navegação principal">
         <ul class="nav__lista">
 {itens}
         </ul>
       </nav>
+      <a class="botao botao--ajuda" href="{u("pages/encontrar-ajuda.html")}"><span class="rotulo-longo">Preciso de ajuda</span><span class="rotulo-curto">Ajuda</span></a>
     </div>
   </header>
 
   <main id="conteudo">
 {corpo.strip(chr(10))}
   </main>
-
-  <aside class="apoio-faixa" aria-label="Apoio imediato">
-    <div class="container">
-      Precisa conversar agora? O <strong>CVV</strong> atende pelo <a href="tel:188">188</a>, gratuitamente, 24 horas. Em emergência médica, ligue <a href="tel:192">192</a> (SAMU). <a href="{u("pages/encontrar-ajuda.html")}">Ver todos os caminhos de ajuda</a>
-    </div>
-  </aside>
-
+{faixa_html}
   <footer class="rodape">
     <div class="container">
       <div class="rodape__grade">
         <div>
           <p class="rodape__marca">Entre Nós</p>
-          <p>Um espaço para cuidar do que sentimos.</p>
-          <p style="margin-top:.75rem;max-width:26rem">Conteúdo informativo. Não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
+          <p class="rodape__assinatura">Um espaço para cuidar do que sentimos.</p>
+          <p class="rodape__nota">Plataforma independente de saúde emocional. O conteúdo é informativo e não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
         </div>
         <nav aria-label="Seções">
           <h2>Navegar</h2>
@@ -249,107 +289,184 @@ def pagina(caminho, titulo, descricao, corpo, atual=None, scripts=()):
           <h2>O projeto</h2>
           <ul class="rodape__lista">
             <li><a href="{u("pages/sobre.html")}">Sobre</a></li>
-            <li><a href="{u("pages/privacidade.html")}">Privacidade</a></li>
             <li><a href="{u("pages/responsabilidade.html")}">Responsabilidade editorial</a></li>
+            <li><a href="{u("pages/privacidade.html")}">Privacidade</a></li>
           </ul>
         </nav>
+        <div>
+          <h2>Apoio imediato</h2>
+          <ul class="rodape__lista">
+            <li><a href="tel:188">CVV — 188</a></li>
+            <li><a href="tel:192">SAMU — 192</a></li>
+          </ul>
+        </div>
       </div>
-      <p class="rodape__fim">© <span data-ano>2026</span> Entre Nós. Este site não usa cookies nem coleta dados pessoais.</p>
+      <p class="rodape__fim"><span>© <span data-ano>2026</span> Entre Nós</span><span>Sem cookies, sem cadastro, sem rastreamento.</span></p>
     </div>
   </footer>
 </body>
 </html>
 '''
     destino = RAIZ / caminho
+    destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(doc, encoding="utf-8")
+    GERADAS.append((caminho, indexar))
 
-def cartao(a, nivel="h3"):
-    return f'''        <article class="cartao" data-categoria="{a["categoria"]}">
-          <span class="etiqueta">{e(CATEGORIAS[a["categoria"]])}</span>
-          <{nivel}><a href="{{{{pages/artigo.html}}}}?id={a["slug"]}">{e(a["titulo"])}</a></{nivel}>
-          <p>{e(a["intro"])}</p>
-          <p class="cartao__meta">{a["leitura"]} min de leitura</p>
-        </article>'''
-
-def cabecalho(sobre, titulo, lead):
+def cabecalho(sobre, titulo, lead, extra=""):
     return f'''    <div class="cabecalho-pagina">
       <div class="container">
         <span class="sobretitulo">{sobre}</span>
         <h1>{titulo}</h1>
-        <p class="lead">{lead}</p>
+        <p class="lead">{lead}</p>{extra}
       </div>
     </div>'''
 
-PAISAGEM = '''<svg class="hero__paisagem" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-        <circle cx="930" cy="110" r="54" fill="#E9DDC4"/>
-        <path d="M0 190 C160 120 300 150 450 175 S760 110 930 150 1130 130 1200 150 V300 H0Z" fill="#DCE6D9"/>
-        <path d="M0 230 C140 180 260 215 420 205 S700 165 860 200 1080 180 1200 205 V300 H0Z" fill="#9DB3A1"/>
-        <g fill="#526F5B">
-          <path d="M0 262 C180 228 330 258 520 246 S820 222 1000 250 1140 240 1200 248 V300 H0Z"/>
-          <path d="M150 250 l14 -46 14 46z M178 252 l11 -34 11 34z M960 246 l15 -52 15 52z M992 248 l11 -36 11 36z M1030 250 l9 -28 9 28z"/>
-        </g>
-        <path d="M0 284 C220 262 420 286 640 276 S1000 268 1200 282 V300 H0Z" fill="#263D32"/>
-      </svg>'''
+def leitura(a, nivel="h3", biblioteca=False):
+    """Linha editorial de artigo (listas do início, da biblioteca e de relacionados)."""
+    miolo = f'''<{nivel}><a href="{{{{u:{url_artigo(a)}}}}}">{e(a["titulo"])}</a></{nivel}>
+            <p>{e(a["intro"])}</p>
+            <p class="meta"><span>{a["leitura"]} min de leitura</span>{situacao(a)}</p>'''
+    cat = f'<span class="etiqueta">{e(CATEGORIAS[a["categoria"]])}</span>'
+    if biblioteca:
+        return f'''          <article class="leitura" data-categoria="{a["categoria"]}">
+            {cat}
+            <div>
+            {miolo}
+            </div>
+          </article>'''
+    return f'''          <article class="leitura">
+            {cat}
+            {miolo}
+          </article>'''
 
-# ---------- Início ----------
-destaques = "\n".join(cartao(a) for a in ARTIGOS if a["slug"] in ("o-que-e-ansiedade", "como-procurar-ajuda-psicologica", "como-apoiar-alguem"))
-cats = "\n".join(f'          <li><a href="{{{{pages/conhecimento.html}}}}?categoria={k}">{e(v)}</a></li>' for k, v in CATEGORIAS.items())
+def prosa(nome):
+    texto = (CONTEUDO / f"{nome}.html").read_text(encoding="utf-8").rstrip()
+    return "\n".join("          " + l if l else l for l in texto.split("\n"))
+
+def por_slug(slug):
+    return next(a for a in ARTIGOS if a["slug"] == slug)
+
+# =====================================================================
+# Início
+# =====================================================================
+principal = por_slug("o-que-e-ansiedade")
+secundarias = "\n".join(leitura(por_slug(s)) for s in ("tristeza-ou-depressao", "como-procurar-ajuda-psicologica", "como-apoiar-alguem"))
+
+def contagem(k):
+    n = len(POR_CATEGORIA[k])
+    return "em preparação" if n == 0 else ("1 leitura" if n == 1 else f"{n} leituras")
+
+temas = "\n".join(f'          <li><a href="{{{{u:pages/conhecimento.html}}}}?categoria={k}"><span>{e(v)}</span><small>{contagem(k)}</small></a></li>'
+                  for k, v in CATEGORIAS.items())
+credito = f'\n            <figcaption>{e(HERO["credito"])}</figcaption>' if HERO["credito"] else ""
+
+def fase(estacao, nome, texto, desenho):
+    return f'''          <div class="fase">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#D5DFD3" stroke-width="1.5" aria-hidden="true"><circle cx="20" cy="20" r="18"/>{desenho}</svg>
+            <p class="fase__estacao">{estacao}</p>
+            <h3>{nome}</h3>
+            <p>{texto}</p>
+          </div>'''
+
+fases = "\n".join([
+    fase("Primavera", "Brotar", "Recomeços raramente são grandiosos. Às vezes, é só voltar a ter vontade de alguma coisa pequena.",
+         '<path d="M20 2a18 18 0 0 1 18 18H20z" fill="#D5DFD3" stroke="none"/>'),
+    fase("Verão", "Florescer", "Há fases de energia e de presença. Elas não são a medida de todas as outras, nem uma obrigação permanente.",
+         '<circle cx="20" cy="20" r="18" fill="#D5DFD3" stroke="none"/>'),
+    fase("Outono", "Soltar", "Perdas, despedidas e mudanças pedem tempo. Deixar ir também faz parte de continuar.",
+         '<path d="M20 2a18 18 0 0 0 0 36z" fill="#D5DFD3" stroke="none"/>'),
+    fase("Inverno", "Repousar", "Recolher-se não é desistir. Muita coisa se refaz em silêncio, antes de aparecer.", ""),
+])
+
 pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
- "Plataforma de saúde emocional com informação confiável, exercícios de pausa e caminhos de apoio. Gratuita, sem cadastro e sem coleta de dados.",
+ "Plataforma independente de saúde emocional: leituras com fontes indicadas, pausas guiadas e caminhos de apoio. Gratuita, sem cadastro e sem rastreamento.",
  f'''    <section class="hero">
-      <div class="container">
-        <div class="hero__conteudo">
+      <div class="container hero__grade">
+        <div>
           <span class="sobretitulo">Saúde emocional</span>
-          <h1>Um espaço para cuidar do que sentimos.</h1>
-          <p class="lead">Informação confiável, pausas para respirar e caminhos de apoio. Sem pressa, sem cadastro e no seu tempo.</p>
+          <h1>Um espaço para cuidar do que <em>sentimos</em>.</h1>
+          <p class="lead">Leituras cuidadosas, pausas para respirar e caminhos de apoio. Sem pressa, no seu tempo.</p>
           <div class="acoes">
-            <a class="botao" href="{{{{pages/conhecimento.html}}}}">Explorar conteúdos</a>
-            <a class="botao botao--contorno" href="{{{{pages/momentos.html}}}}">Fazer uma pausa</a>
+            <a class="botao" href="{{{{u:pages/conhecimento.html}}}}">Explorar as leituras</a>
+            <a class="botao botao--contorno" href="{{{{u:pages/momentos.html}}}}">Fazer uma pausa</a>
           </div>
+          <ul class="hero__garantias">
+            <li>Gratuito</li>
+            <li>Sem cadastro</li>
+            <li>Sem rastreamento</li>
+          </ul>
         </div>
+        <figure class="moldura">
+          <img src="{{{{u:assets/images/{HERO["arquivo"]}}}}}" alt="{e(HERO["alt"])}" width="900" height="1035" fetchpriority="high">{credito}
+        </figure>
       </div>
-      {PAISAGEM}
     </section>
 
     <section class="secao" aria-labelledby="t-caminhos">
       <div class="container">
         <div class="secao__cabecalho">
           <span class="sobretitulo">Por onde começar</span>
-          <h2 id="t-caminhos">Três caminhos, conforme o seu momento</h2>
+          <h2 id="t-caminhos">O que você procura hoje?</h2>
         </div>
-        <div class="grade">
-          <div class="caminho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.500v-13c-3-.5-6 0-8 1.5zM12 6v13"/></svg>
-            <h3>Quero entender</h3>
-            <p>Artigos sobre ansiedade, tristeza, solidão, esgotamento e outros temas, com fontes indicadas.</p>
-            <a href="{{{{pages/conhecimento.html}}}}">Ir para Conhecimento</a>
-          </div>
-          <div class="caminho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5C11 5 6 9.500 6 15.500c0 1.200.2 2.300.6 3.300M19 5c.8 8.500-2.500 13.500-8 13.500-1.500 0-3-.5-4.400-1.200M19 5c-5 2.500-9 7-12.400 13.800"/></svg>
-            <h3>Quero uma pausa</h3>
-            <p>Respiração guiada, atenção aos sentidos e perguntas para refletir. Poucos minutos bastam.</p>
-            <a href="{{{{pages/momentos.html}}}}">Ir para Momentos</a>
-          </div>
-          <div class="caminho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12.500 5.500 10a3.200 3.200 0 0 1 4.500-4.500l2 2 2-2a3.200 3.200 0 0 1 4.500 4.500L12 16.500l-1.500-1.500M3 14l4 4.500c1 1 2.500 1.500 4 1.500h3"/></svg>
-            <h3>Preciso de ajuda</h3>
+        <ol class="caminhos">
+          <li class="caminho">
+            <span class="caminho__num" aria-hidden="true">01</span>
+            <h3><a href="{{{{u:pages/conhecimento.html}}}}">Quero entender</a></h3>
+            <p>Textos sobre ansiedade, tristeza, solidão e esgotamento, com as fontes indicadas.</p>
+            <span class="caminho__seta" aria-hidden="true">→</span>
+          </li>
+          <li class="caminho">
+            <span class="caminho__num" aria-hidden="true">02</span>
+            <h3><a href="{{{{u:pages/momentos.html}}}}">Quero uma pausa</a></h3>
+            <p>Quatro exercícios breves de respiração, atenção e reflexão. De um a três minutos.</p>
+            <span class="caminho__seta" aria-hidden="true">→</span>
+          </li>
+          <li class="caminho">
+            <span class="caminho__num" aria-hidden="true">03</span>
+            <h3><a href="{{{{u:pages/encontrar-ajuda.html}}}}">Preciso de ajuda</a></h3>
             <p>Serviços públicos e gratuitos, e como chegar a um atendimento profissional.</p>
-            <a href="{{{{pages/encontrar-ajuda.html}}}}">Ir para Encontrar ajuda</a>
+            <span class="caminho__seta" aria-hidden="true">→</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="secao secao--borda" aria-labelledby="t-leituras">
+      <div class="container">
+        <div class="secao__cabecalho">
+          <span class="sobretitulo">Conhecimento</span>
+          <h2 id="t-leituras">Leituras para começar</h2>
+        </div>
+        <div class="destaque">
+          <article class="destaque__principal">
+            <span class="etiqueta">{e(CATEGORIAS[principal["categoria"]])}</span>
+            <h3><a href="{{{{u:{url_artigo(principal)}}}}}">{e(principal["titulo"])}</a></h3>
+            <p>{e(principal["intro"])}</p>
+            <p class="meta">{principal["leitura"]} min de leitura · {"Revisado por profissional" if principal["revisado"] else "Aguardando revisão profissional"}</p>
+          </article>
+          <div>
+            <div class="leituras">
+{secundarias}
+            </div>
+            <p style="margin-top:var(--e-4)"><a class="link-seta" href="{{{{u:pages/conhecimento.html}}}}">Ver todas as leituras</a></p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="secao secao--areia" aria-labelledby="t-destaques">
+    <section class="secao ciclos" aria-labelledby="t-ciclos">
       <div class="container">
-        <div class="secao__cabecalho">
-          <span class="sobretitulo">Em destaque</span>
-          <h2 id="t-destaques">Leituras para começar</h2>
+        <div class="ciclos__intro">
+          <div>
+            <span class="sobretitulo">Nosso jeito de ver</span>
+            <h2 id="t-ciclos">A vida acontece em ciclos</h2>
+          </div>
+          <p>Uma floresta não floresce o ano inteiro. Há meses de broto, de copa cheia, de folhas no chão e de galhos nus, e nenhum deles é um erro. Com o que sentimos, costuma ser parecido.</p>
         </div>
-        <div class="grade">
-{destaques}
+        <div class="fases">
+{fases}
         </div>
-        <div class="acoes"><a class="botao botao--contorno" href="{{{{pages/conhecimento.html}}}}">Ver toda a biblioteca</a></div>
+        <p class="ciclos__fecho">Nenhuma estação dura para sempre, e ninguém precisa atravessá-las no mesmo ritmo. Mas ciclos não explicam tudo: quando o inverno parece não passar, <a href="{{{{u:pages/encontrar-ajuda.html}}}}">vale procurar ajuda</a>.</p>
       </div>
     </section>
 
@@ -358,89 +475,177 @@ pagina("index.html", "Entre Nós — Um espaço para cuidar do que sentimos",
         <div class="secao__cabecalho">
           <span class="sobretitulo">Temas</span>
           <h2 id="t-temas">Explorar por assunto</h2>
+          <p>A biblioteca cresce devagar: cada texto só entra depois de ter as fontes conferidas.</p>
         </div>
-        <ul class="categorias">
-{cats}
+        <ul class="temas">
+{temas}
         </ul>
       </div>
     </section>
 
-    <section class="secao secao--verde" aria-labelledby="t-ciclos">
-      <div class="container">
-        <div class="secao__cabecalho" style="margin-bottom:0">
-          <span class="sobretitulo">Nosso jeito de ver</span>
-          <h2 id="t-ciclos">Como a natureza, as pessoas têm ciclos</h2>
-          <p>Há tempos de crescer, de mudar e de descansar. Tristeza não é fraqueza, e ninguém precisa atravessar uma fase difícil no ritmo dos outros. O Entre Nós não existe para ensinar a ser feliz o tempo inteiro: existe para oferecer conhecimento, acolhimento e caminhos de cuidado.</p>
-          <div class="acoes"><a class="botao" href="{{{{pages/sobre.html}}}}">Conhecer o projeto</a></div>
+    <section class="secao secao--areia" aria-labelledby="t-apoio">
+      <div class="container apoio">
+        <div>
+          <span class="sobretitulo">Apoio</span>
+          <h2 id="t-apoio">Se hoje estiver difícil demais</h2>
+          <p>Você não precisa esperar a situação piorar para pedir ajuda. Estes serviços são gratuitos e funcionam a qualquer hora.</p>
+          <div class="acoes"><a class="botao botao--contorno" href="{{{{u:pages/encontrar-ajuda.html}}}}">Ver todos os caminhos de ajuda</a></div>
+        </div>
+        <div class="telefones">
+          <a class="telefone" href="tel:188"><strong>188</strong><span><b>CVV — Centro de Valorização da Vida</b>Apoio emocional, 24 horas</span></a>
+          <a class="telefone" href="tel:192"><strong>192</strong><span><b>SAMU</b>Emergências médicas, 24 horas</span></a>
         </div>
       </div>
-    </section>''', atual="inicio")
+    </section>''', atual="inicio", faixa=False,
+ json_ld={"@context": "https://schema.org", "@type": "WebSite", "name": "Entre Nós", "url": SITE_URL, "inLanguage": "pt-BR",
+          "description": "Plataforma independente de saúde emocional."})
+# o início é um site, não um artigo
+p = RAIZ / "index.html"; p.write_text(p.read_text().replace('og:type" content="article"', 'og:type" content="website"'))
 
-# ---------- Conhecimento ----------
-filtros = '          <button class="filtro" type="button" data-filtro="todas" aria-pressed="true">Todas</button>\n' + "\n".join(
-    f'          <button class="filtro" type="button" data-filtro="{k}" aria-pressed="false">{e(v)}</button>' for k, v in CATEGORIAS.items())
-todos = "\n".join(cartao(a, "h2") for a in ARTIGOS).replace("<h2>", '<h2 style="font-size:var(--t-lg)">')
-pagina("pages/conhecimento.html", "Conhecimento", "Biblioteca de conteúdos sobre saúde emocional: ansiedade, depressão, solidão, esgotamento, relacionamentos e mais, com fontes indicadas.",
- cabecalho("Biblioteca", "Conhecimento", "Textos para compreender melhor o que sentimos. Cada artigo indica autoria, fontes e situação de revisão.") + f'''
+# =====================================================================
+# Conhecimento (biblioteca)
+# =====================================================================
+filtros = f'            <button class="filtro" type="button" data-filtro="todas" aria-pressed="true">Todas <small>{len(ARTIGOS)}</small></button>\n' + "\n".join(
+    f'            <button class="filtro" type="button" data-filtro="{k}" aria-pressed="false">{e(v)} <small>{len(POR_CATEGORIA[k])}</small></button>' for k, v in CATEGORIAS.items())
+todos = "\n".join(leitura(a, "h2", biblioteca=True) for a in ARTIGOS)
+pagina("pages/conhecimento.html", "Conhecimento", "Biblioteca de leituras sobre saúde emocional: ansiedade, depressão, solidão, esgotamento, relacionamentos e mais, com fontes indicadas.",
+ cabecalho("Biblioteca", "Conhecimento", "Textos para compreender melhor o que sentimos. Cada leitura indica autoria, fontes e situação de revisão.") + f'''
     <section class="secao">
       <div class="container">
         <div class="busca" role="search">
           <div>
-            <label for="busca-artigos">Buscar artigos</label>
-            <input type="search" id="busca-artigos" placeholder="Ex.: ansiedade, sono, apoio" autocomplete="off">
+            <label for="busca-artigos">Buscar por palavra ou assunto</label>
+            <input type="search" id="busca-artigos" placeholder="Ex.: ansiedade, cansaço, apoio" autocomplete="off">
           </div>
-          <div class="filtros" role="group" aria-label="Filtrar por categoria">
+          <div class="filtros" role="group" aria-label="Filtrar por tema">
 {filtros}
           </div>
         </div>
         <p class="resultado-info" id="resultado-info" role="status" aria-live="polite"></p>
-        <div class="grade" id="lista-artigos">
+        <div class="leituras leituras--biblioteca" id="lista-artigos">
 {todos}
         </div>
         <div class="vazio" id="sem-resultados" hidden>
-          <h2 style="font-size:var(--t-lg)">Ainda não há conteúdos aqui</h2>
-          <p style="margin-top:.5rem">Não encontramos artigos para essa busca ou categoria. A biblioteca está em construção, e cada texto só é publicado depois de verificado.</p>
-          <div class="acoes"><button class="botao botao--contorno botao--pequeno" type="button" id="limpar-busca">Ver todos os artigos</button></div>
+          <h2>Ainda não há leituras aqui</h2>
+          <p>Não encontramos textos para essa busca ou tema. A biblioteca está em construção, e preferimos publicar pouco a publicar sem verificar.</p>
+          <div class="acoes"><button class="botao botao--contorno botao--pequeno" type="button" id="limpar-busca">Ver todas as leituras</button></div>
         </div>
       </div>
     </section>''', atual="conhecimento", scripts=("search.js",))
 
-# ---------- Artigo ----------
-lista_noscript = "\n".join(f'            <li>{e(a["titulo"])}</li>' for a in ARTIGOS)
-pagina("pages/artigo.html", "Artigo", "Leitura de artigo da biblioteca do Entre Nós.",
- f'''    <div class="container artigo">
-      <p style="margin-bottom:var(--e-4)"><a class="voltar" href="{{{{pages/conhecimento.html}}}}">← Voltar para Conhecimento</a></p>
-      <article id="artigo"></article>
-      <div class="vazio" id="artigo-ausente" hidden>
-        <h1 style="font-size:var(--t-xl)">Artigo não encontrado</h1>
-        <p style="margin-top:.5rem">O endereço pode estar incompleto ou o conteúdo pode ter sido movido.</p>
-        <div class="acoes"><a class="botao" href="{{{{pages/conhecimento.html}}}}">Ir para a biblioteca</a></div>
-      </div>
-      <noscript>
-        <div class="vazio">
-          <h1 style="font-size:var(--t-xl)">Esta leitura precisa de JavaScript</h1>
-          <p style="margin-top:.5rem">Os artigos são montados no navegador. Ative o JavaScript para ler, ou volte para a <a href="{{{{pages/conhecimento.html}}}}">biblioteca</a>.</p>
-        </div>
-      </noscript>
-    </div>
-    <section class="secao secao--areia relacionados" id="relacionados" aria-labelledby="t-rel" hidden>
-      <div class="container">
-        <div class="secao__cabecalho"><h2 id="t-rel">Conteúdos relacionados</h2></div>
-        <div class="grade" id="relacionados-lista"></div>
-      </div>
-    </section>''', atual="conhecimento", scripts=("data/articles.js", "article.js"))
+# =====================================================================
+# Artigos (uma página estática por artigo)
+# =====================================================================
+def corpo_artigo(a):
+    partes = []
+    for s in a["secoes"]:
+        if s["titulo"]:
+            partes.append(f'          <h2>{e(s["titulo"])}</h2>')
+        for b in s["blocos"]:
+            if isinstance(b, list):
+                partes.append("          <ul>\n" + "\n".join(f"            <li>{e(i)}</li>" for i in b) + "\n          </ul>")
+            else:
+                partes.append(f"          <p>{e(b)}</p>")
+    return "\n".join(partes)
 
-# ---------- Momentos ----------
-pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de respiração, atenção aos sentidos, pausa e reflexão. Nada é registrado.",
- cabecalho("Momentos", "Um momento para mim", "Pequenas pausas para fazer agora, no seu ritmo. Nada do que você fizer aqui é registrado ou enviado.") + '''
+for a in ARTIGOS:
+    outros = sorted((o for o in ARTIGOS if o is not a), key=lambda o: o["categoria"] != a["categoria"])[:3]
+    relacionados = "\n".join(leitura(o) for o in outros)
+    fontes = "\n".join(f'            <li><a href="{e(f["url"])}" rel="noopener noreferrer">{e(f["nome"])}</a></li>' for f in a["fontes"])
+    if a["revisado"]:
+        revisao = f'{data_extenso(a["revisado"])}, por {e(a["revisor"])}'
+        aviso = ""
+    else:
+        revisao = "Aguardando revisão profissional"
+        aviso = '''
+        <p class="aviso"><strong>Conteúdo em revisão.</strong> Este texto ainda não foi revisado por um profissional de saúde mental. Ele foi redigido a partir das fontes listadas ao final e deve ser lido como informação geral, não como orientação clínica.</p>'''
+    pagina(url_artigo(a), a["titulo"], a["intro"], f'''    <div class="container artigo">
+      <nav class="trilha" aria-label="Você está em">
+        <ol>
+          <li><a href="{{{{u:index.html}}}}">Início</a></li>
+          <li><a href="{{{{u:pages/conhecimento.html}}}}">Conhecimento</a></li>
+          <li><a href="{{{{u:pages/conhecimento.html}}}}?categoria={a["categoria"]}">{e(CATEGORIAS[a["categoria"]])}</a></li>
+        </ol>
+      </nav>
+      <article>
+        <header class="artigo__topo">
+          <span class="etiqueta">{e(CATEGORIAS[a["categoria"]])}</span>
+          <h1>{e(a["titulo"])}</h1>
+          <p class="lead">{e(a["intro"])}</p>
+        </header>
+        <dl class="ficha">
+          <div><dt>Autoria</dt><dd>{e(a["autoria"])}</dd></div>
+          <div><dt>Publicação</dt><dd><time datetime="{a["publicado"]}">{data_extenso(a["publicado"])}</time></dd></div>
+          <div><dt>Revisão</dt><dd>{revisao}</dd></div>
+          <div><dt>Leitura</dt><dd>{a["leitura"]} minutos</dd></div>
+        </dl>{aviso}
+        <div class="prosa prosa--artigo">
+{corpo_artigo(a)}
+          <p class="aviso aviso--verde">Este conteúdo é informativo e não substitui avaliação, diagnóstico ou acompanhamento profissional. <a href="{{{{u:pages/responsabilidade.html}}}}">Como produzimos nossos conteúdos</a>.</p>
+        </div>
+        <section class="fontes" aria-labelledby="t-fontes">
+          <h2 id="t-fontes">Fontes consultadas</h2>
+          <ol>
+{fontes}
+          </ol>
+          <p>Os links levam a sites externos, de responsabilidade das instituições citadas.</p>
+        </section>
+        <aside class="artigo__ajuda" aria-labelledby="t-ajuda">
+          <h2 id="t-ajuda">Precisa de apoio agora?</h2>
+          <p>O CVV atende pelo <a href="tel:188">188</a>, gratuitamente, 24 horas. Em emergência médica, ligue <a href="tel:192">192</a>. Veja também <a href="{{{{u:pages/encontrar-ajuda.html}}}}">outros caminhos de ajuda</a>.</p>
+        </aside>
+      </article>
+    </div>
+    <section class="secao secao--borda relacionados" aria-labelledby="t-rel">
+      <div class="container">
+        <div class="secao__cabecalho" style="margin-bottom:var(--e-4)"><h2 id="t-rel">Continuar lendo</h2></div>
+        <div class="leituras" style="max-width:48rem">
+{relacionados}
+        </div>
+      </div>
+    </section>''', atual="conhecimento", faixa=False,
+     json_ld={"@context": "https://schema.org", "@type": "Article", "headline": a["titulo"], "description": a["intro"],
+              "inLanguage": "pt-BR", "datePublished": a["publicado"], **({"dateModified": a["revisado"]} if a["revisado"] else {}),
+              "author": {"@type": "Organization", "name": a["autoria"]},
+              "publisher": {"@type": "Organization", "name": "Entre Nós"},
+              "mainEntityOfPage": SITE_URL + url_artigo(a)})
+
+# Endereço antigo (artigo.html?id=<slug>): redireciona para a página do artigo e, sem id, lista as leituras.
+indice = "\n".join(f'          <li class="leitura"><span class="etiqueta">{e(CATEGORIAS[a["categoria"]])}</span><h2><a data-slug="{a["slug"]}" href="artigos/{a["slug"]}.html">{e(a["titulo"])}</a></h2></li>' for a in ARTIGOS)
+pagina("pages/artigo.html", "Leituras", "Índice das leituras do Entre Nós.",
+ cabecalho("Biblioteca", "Leituras", "Cada leitura tem o seu próprio endereço. Escolha uma para começar.") + f'''
     <section class="secao">
       <div class="container">
-        <p class="aviso" style="max-width:44rem;margin-bottom:var(--e-5)"><strong>Um cuidado:</strong> estes exercícios são convites de pausa, não tratamentos. Se algum deles causar desconforto, pare. Em sofrimento intenso, veja <a href="{{pages/encontrar-ajuda.html}}">Encontrar ajuda</a>.</p>
+        <p class="aviso" id="aviso-endereco" role="status" hidden style="max-width:48rem;margin-bottom:var(--e-4)"></p>
+        <ul class="leituras" style="max-width:48rem">
+{indice}
+        </ul>
+        <p style="margin-top:var(--e-4)"><a class="link-seta" href="conhecimento.html">Buscar e filtrar na biblioteca</a></p>
+      </div>
+    </section>''', atual="conhecimento", scripts=("article.js",), indexar=False)
+
+# =====================================================================
+# Momentos
+# =====================================================================
+sumario = '''
+        <nav class="sumario" aria-label="Exercícios desta página">
+          <a href="#ex-respiracao">Respiração guiada <small>2 min</small></a>
+          <a href="#ex-sentidos">Atenção aos sentidos <small>3 min</small></a>
+          <a href="#ex-pausa">Pausa de um minuto <small>1 min</small></a>
+          <a href="#ex-reflexao">Uma pergunta <small>livre</small></a>
+        </nav>'''
+pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de respiração, atenção aos sentidos, pausa e reflexão. Nada é registrado.",
+ cabecalho("Momentos", "Um momento para mim", "Pequenas pausas para fazer agora, no seu ritmo. Nada do que você fizer aqui é registrado ou enviado.", sumario) + '''
+    <section class="secao">
+      <div class="container">
+        <p class="aviso" style="max-width:46rem;margin-bottom:var(--e-6)"><strong>Um cuidado:</strong> estes exercícios são convites de pausa, não tratamentos. Se algum deles causar desconforto, pare. Em sofrimento intenso, veja <a href="{{u:pages/encontrar-ajuda.html}}">Encontrar ajuda</a>.</p>
 
         <section class="exercicio" id="ex-respiracao" aria-labelledby="t-resp">
-          <span class="etiqueta">2 minutos</span>
-          <h2 id="t-resp" style="margin-top:var(--e-2)">Respiração guiada</h2>
-          <p>Acompanhe o círculo: inspire enquanto ele cresce, por 4 segundos, e solte o ar enquanto ele diminui, por 6. Se o ritmo não for confortável, respire do seu jeito.</p>
+          <div class="exercicio__texto">
+            <span class="etiqueta">2 minutos</span>
+            <h2 id="t-resp">Respiração guiada</h2>
+            <p>Acompanhe o círculo: inspire enquanto ele cresce, por 4 segundos, e solte o ar enquanto ele diminui, por 6. Se o ritmo não for confortável, respire do seu jeito.</p>
+          </div>
           <div class="exercicio__palco">
             <div class="respiro" aria-hidden="true"></div>
             <p class="palco__fase" aria-live="polite">Quando quiser, comece.</p>
@@ -450,9 +655,11 @@ pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de res
         </section>
 
         <section class="exercicio" id="ex-sentidos" aria-labelledby="t-sent">
-          <span class="etiqueta">3 minutos</span>
-          <h2 id="t-sent" style="margin-top:var(--e-2)">Atenção aos sentidos</h2>
-          <p>Um jeito de voltar a atenção para o presente, passando por cada um dos cinco sentidos. Avance quando estiver pronto.</p>
+          <div class="exercicio__texto">
+            <span class="etiqueta">3 minutos</span>
+            <h2 id="t-sent">Atenção aos sentidos</h2>
+            <p>Um jeito de trazer a atenção de volta para o presente, passando por cada um dos cinco sentidos. Avance quando estiver pronto.</p>
+          </div>
           <div class="exercicio__palco" aria-live="polite">
             <p class="passo__numero" aria-hidden="true">5</p>
             <p class="palco__fase"></p>
@@ -465,9 +672,11 @@ pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de res
         </section>
 
         <section class="exercicio" id="ex-pausa" aria-labelledby="t-pausa">
-          <span class="etiqueta">1 minuto</span>
-          <h2 id="t-pausa" style="margin-top:var(--e-2)">Pausa de um minuto</h2>
-          <p>Sessenta segundos sem tarefa nenhuma. Não é preciso esvaziar a mente; basta não fazer nada por um instante.</p>
+          <div class="exercicio__texto">
+            <span class="etiqueta">1 minuto</span>
+            <h2 id="t-pausa">Pausa de um minuto</h2>
+            <p>Sessenta segundos sem tarefa nenhuma. Não é preciso esvaziar a mente; basta não fazer nada por um instante.</p>
+          </div>
           <div class="exercicio__palco">
             <p class="palco__fase" aria-live="polite">Um minuto, sem tarefa nenhuma.</p>
             <p class="palco__apoio"></p>
@@ -477,9 +686,11 @@ pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de res
         </section>
 
         <section class="exercicio" id="ex-reflexao" aria-labelledby="t-refl">
-          <span class="etiqueta">Livre</span>
-          <h2 id="t-refl" style="margin-top:var(--e-2)">Uma pergunta para refletir</h2>
-          <p>Fique com a pergunta pelo tempo que quiser. Responda em pensamento ou no papel: este site não guarda o que você escreve.</p>
+          <div class="exercicio__texto">
+            <span class="etiqueta">Sem tempo marcado</span>
+            <h2 id="t-refl">Uma pergunta para refletir</h2>
+            <p>Fique com a pergunta pelo tempo que quiser. Responda em pensamento ou no papel: este site não guarda o que você escreve.</p>
+          </div>
           <div class="exercicio__palco">
             <p class="pergunta" aria-live="polite">Do que eu estou precisando neste momento?</p>
             <div class="acoes"><button class="botao botao--contorno" type="button" data-acao="outra">Outra pergunta</button></div>
@@ -488,10 +699,12 @@ pagina("pages/momentos.html", "Um momento para mim", "Exercícios simples de res
       </div>
     </section>''', atual="momentos", scripts=("exercises.js",))
 
-# ---------- Encontrar ajuda ----------
+# =====================================================================
+# Encontrar ajuda
+# =====================================================================
 pagina("pages/encontrar-ajuda.html", "Encontrar ajuda", "Caminhos de apoio em saúde mental no Brasil: CVV 188, SAMU 192, CAPS, UBS e como procurar atendimento psicológico.",
- cabecalho("Apoio", "Encontrar ajuda", "Pedir ajuda é um gesto de cuidado. Aqui estão caminhos públicos e gratuitos de atendimento no Brasil.") + '''
-    <section class="secao">
+ cabecalho("Apoio", "Encontrar ajuda", "Pedir ajuda é um gesto de cuidado. Aqui estão caminhos públicos e gratuitos de atendimento no Brasil.") + f'''
+    <section class="secao" style="padding-bottom:0">
       <div class="container">
         <div class="urgencia">
           <h2>Se você está em crise agora</h2>
@@ -504,172 +717,95 @@ pagina("pages/encontrar-ajuda.html", "Encontrar ajuda", "Caminhos de apoio em sa
       </div>
     </section>
 
-    <section class="secao secao--areia" aria-labelledby="t-servicos">
+    <section class="secao" aria-labelledby="t-servicos">
       <div class="container">
         <div class="secao__cabecalho">
           <span class="sobretitulo">Serviços</span>
           <h2 id="t-servicos">Onde procurar atendimento</h2>
         </div>
-        <div class="grade">
-          <article class="recurso">
-            <span class="etiqueta">Apoio emocional · 24 horas</span>
-            <p class="recurso__numero">188</p>
-            <h3>CVV — Centro de Valorização da Vida</h3>
-            <p>Apoio emocional e prevenção do suicídio, por voluntários, com sigilo. A ligação é gratuita em todo o país. Também há atendimento por chat e e-mail no site.</p>
-            <a class="botao botao--contorno botao--pequeno" href="https://cvv.org.br/" rel="noopener noreferrer">Acessar cvv.org.br</a>
+        <div class="servicos">
+          <article class="servico">
+            <p class="servico__numero">188</p>
+            <div><span class="etiqueta">Apoio emocional · 24 horas</span><h3>CVV — Centro de Valorização da Vida</h3></div>
+            <div class="servico__corpo">
+              <p>Apoio emocional e prevenção do suicídio, por voluntários, com sigilo. A ligação é gratuita em todo o país. Também há atendimento por chat e e-mail no site.</p>
+              <a class="link-seta" href="https://cvv.org.br/" rel="noopener noreferrer">Acessar cvv.org.br</a>
+            </div>
           </article>
-          <article class="recurso">
-            <span class="etiqueta etiqueta--terra">Emergência médica · 24 horas</span>
-            <p class="recurso__numero">192</p>
-            <h3>SAMU</h3>
-            <p>Serviço de Atendimento Móvel de Urgência. Para situações com risco à vida, incluindo crises em saúde mental com risco imediato. A ligação é gratuita.</p>
-            <a class="botao botao--contorno botao--pequeno" href="tel:192">Ligar 192</a>
+          <article class="servico">
+            <p class="servico__numero">192</p>
+            <div><span class="etiqueta">Emergência médica · 24 horas</span><h3>SAMU</h3></div>
+            <div class="servico__corpo">
+              <p>Serviço de Atendimento Móvel de Urgência. Para situações com risco à vida, incluindo crises em saúde mental com risco imediato. A ligação é gratuita.</p>
+              <a class="link-seta" href="tel:192">Ligar 192</a>
+            </div>
           </article>
-          <article class="recurso">
-            <span class="etiqueta">SUS · sofrimento intenso</span>
-            <h3>CAPS — Centro de Atenção Psicossocial</h3>
-            <p>Serviço público para pessoas em sofrimento psíquico intenso ou persistente, com equipe multiprofissional. Em geral, recebe diretamente, sem necessidade de encaminhamento.</p>
-            <p>Para localizar o CAPS da sua região, consulte a secretaria de saúde do município ou a UBS mais próxima.</p>
+          <article class="servico">
+            <p class="servico__numero servico__numero--sigla">CAPS</p>
+            <div><span class="etiqueta">SUS · sofrimento intenso</span><h3>Centro de Atenção Psicossocial</h3></div>
+            <div class="servico__corpo">
+              <p>Serviço público para pessoas em sofrimento psíquico intenso ou persistente, com equipe multiprofissional. Em geral, recebe diretamente, sem necessidade de encaminhamento.</p>
+              <p>Para localizar o CAPS da sua região, consulte a secretaria de saúde do município ou a UBS mais próxima.</p>
+            </div>
           </article>
-          <article class="recurso">
-            <span class="etiqueta">SUS · porta de entrada</span>
-            <h3>UBS — Unidade Básica de Saúde</h3>
-            <p>O posto de saúde do seu bairro é o primeiro lugar para falar sobre como você tem se sentido. A equipe acolhe, acompanha e encaminha para outros serviços quando necessário.</p>
+          <article class="servico">
+            <p class="servico__numero servico__numero--sigla">UBS</p>
+            <div><span class="etiqueta">SUS · porta de entrada</span><h3>Unidade Básica de Saúde</h3></div>
+            <div class="servico__corpo">
+              <p>O posto de saúde do seu bairro é o primeiro lugar para falar sobre como você tem se sentido. A equipe acolhe, acompanha e encaminha para outros serviços quando necessário.</p>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
+    <section class="secao secao--areia">
+      <div class="container">
+        <div class="prosa">
+{prosa("encontrar-ajuda")}
+        </div>
+      </div>
+    </section>''', atual="ajuda", faixa=False)
+
+# =====================================================================
+# Páginas institucionais (texto em tools/conteudo/*.html)
+# =====================================================================
+def institucional(arquivo, titulo, descricao, sobre, h1, lead, atual=None):
+    pagina(f"pages/{arquivo}.html", titulo, descricao, cabecalho(sobre, h1, lead) + f'''
     <section class="secao">
       <div class="container">
         <div class="prosa">
-          <h2 style="margin-top:0">Outros caminhos</h2>
-          <ul>
-            <li><strong>Clínicas-escola:</strong> cursos de Psicologia de universidades costumam oferecer atendimento gratuito ou a preço reduzido.</li>
-            <li><strong>Plano de saúde:</strong> consultas com psicólogos e psiquiatras fazem parte da cobertura; verifique as condições do seu plano.</li>
-            <li><strong>Atendimento particular:</strong> ao escolher um psicólogo, confira o registro no Conselho Regional de Psicologia (CRP).</li>
-          </ul>
-          <p>Quer entender melhor as opções? Leia <a href="{{pages/artigo.html}}?id=como-procurar-ajuda-psicologica">Como procurar ajuda psicológica?</a></p>
-          <h2>Se a preocupação é com outra pessoa</h2>
-          <p>Fique por perto, escute sem julgar e ajude a pessoa a chegar a um desses serviços. Você também pode ligar para o 188 para se orientar. Leia <a href="{{pages/artigo.html}}?id=como-apoiar-alguem">Como apoiar alguém que está passando por dificuldades?</a></p>
-          <p class="aviso">O Entre Nós não oferece atendimento, não responde mensagens e não acompanha casos. Os serviços listados são mantidos por outras instituições, e horários e condições podem variar por região.</p>
+{prosa(arquivo)}
         </div>
       </div>
-    </section>''', atual="ajuda")
+    </section>''', atual=atual)
 
-# ---------- Sobre ----------
-pagina("pages/sobre.html", "Sobre", "Conheça o propósito, a missão e os valores do Entre Nós, uma plataforma de saúde emocional voltada à informação, ao acolhimento e à conexão.",
- cabecalho("O projeto", "Sobre o Entre Nós", "Uma plataforma de saúde emocional feita para informar, acolher e orientar.") + '''
+institucional("sobre", "Sobre", "Conheça o propósito, a missão e os valores do Entre Nós, uma plataforma independente de saúde emocional.",
+              "O projeto", "Sobre o Entre Nós", "Uma plataforma independente de saúde emocional, feita para informar, acolher e orientar.", atual="sobre")
+institucional("privacidade", "Política de privacidade", "O Entre Nós não usa cookies, não exige cadastro e não coleta dados pessoais. Veja como tratamos a sua privacidade.",
+              "Transparência", "Política de privacidade", "Em resumo: não pedimos, não coletamos e não guardamos dados pessoais seus.")
+institucional("responsabilidade", "Limites e responsabilidade editorial", "Como os conteúdos do Entre Nós são produzidos e revisados, e quais são os limites deste espaço.",
+              "Transparência", "Limites e responsabilidade editorial", "O que você pode esperar deste espaço, e o que ele não pode oferecer.")
+
+# =====================================================================
+# 404 (o GitHub Pages serve este arquivo em qualquer endereço inexistente; por isso usa <base>)
+# =====================================================================
+pagina("404.html", "Página não encontrada", "O endereço procurado não existe no Entre Nós.",
+ cabecalho("Erro 404", "Este caminho não leva a lugar nenhum", "O endereço pode ter mudado ou ter sido digitado de outro jeito. Estes caminhos continuam abertos:") + '''
     <section class="secao">
       <div class="container">
-        <div class="prosa">
-          <h2 style="margin-top:0">O que somos</h2>
-          <p>O Entre Nós é uma plataforma digital dedicada à saúde emocional. Reunimos informação confiável, exercícios simples de pausa e caminhos para quem precisa de apoio.</p>
-          <p>Não somos uma clínica virtual, um serviço de diagnóstico nem um substituto da psicoterapia. Somos um ambiente complementar de conhecimento e cuidado.</p>
-
-          <h2>Missão</h2>
-          <p>Tornar informações sobre saúde emocional mais acessíveis e oferecer um ambiente digital acolhedor, responsável e humano.</p>
-
-          <h2>Por que a natureza</h2>
-          <p>A natureza tem ciclos: períodos de crescimento, de mudança e de descanso. As pessoas também passam por fases emocionais diferentes. Por isso, aqui você não vai encontrar a ideia de que tristeza é fraqueza, de que basta pensar positivo ou de que todos precisam superar dificuldades no mesmo ritmo.</p>
-
-          <h2>Valores</h2>
-          <ul>
-            <li><strong>Empatia e respeito</strong> pelo tempo e pela realidade de cada pessoa.</li>
-            <li><strong>Responsabilidade e honestidade</strong> sobre o que este espaço é e o que ele não é.</li>
-            <li><strong>Privacidade:</strong> sem cadastro, sem rastreamento, sem venda de dados.</li>
-            <li><strong>Acessibilidade:</strong> leitura confortável em qualquer tela e com tecnologias assistivas.</li>
-            <li><strong>Ciência e informação confiável</strong>, com fontes indicadas em cada artigo.</li>
-            <li><strong>Humanidade</strong> na forma de falar sobre o que sentimos.</li>
-          </ul>
-
-          <h2>O que vem depois</h2>
-          <p>Esta é a primeira versão. Estão planejados, para etapas futuras, um diário emocional privado, novas experiências interativas, histórias compartilhadas com consentimento e moderação, e a participação de profissionais na produção e revisão dos conteúdos.</p>
-
-          <h2>Como nos sustentamos</h2>
-          <p>A prioridade do projeto é o impacto social. Nenhuma informação pessoal ou emocional será comercializada, e eventuais formas de financiamento não poderão comprometer a independência editorial.</p>
-
-          <p>Saiba mais em <a href="{{pages/responsabilidade.html}}">Responsabilidade editorial</a> e <a href="{{pages/privacidade.html}}">Privacidade</a>.</p>
+        <div class="acoes" style="margin-top:0">
+          <a class="botao" href="index.html">Página inicial</a>
+          <a class="botao botao--contorno" href="pages/conhecimento.html">Leituras</a>
+          <a class="botao botao--contorno" href="pages/momentos.html">Momentos</a>
+          <a class="botao botao--contorno" href="pages/encontrar-ajuda.html">Encontrar ajuda</a>
         </div>
       </div>
-    </section>''', atual="sobre")
+    </section>''', indexar=False, base=BASE_PATH)
 
-# ---------- Privacidade ----------
-pagina("pages/privacidade.html", "Política de privacidade", "O Entre Nós não usa cookies, não exige cadastro e não coleta dados pessoais. Veja como tratamos a sua privacidade.",
- cabecalho("Transparência", "Política de privacidade", "Em resumo: não pedimos, não coletamos e não guardamos dados pessoais seus.") + f'''
-    <section class="secao">
-      <div class="container">
-        <div class="prosa">
-          <p><em>Última atualização: 15 de novembro de 2026.</em></p>
-
-          <h2>O que este site não faz</h2>
-          <ul>
-            <li>Não exige cadastro, login ou identificação.</li>
-            <li>Não usa cookies.</li>
-            <li>Não usa ferramentas de análise de audiência, publicidade ou rastreamento.</li>
-            <li>Não carrega fontes, scripts ou imagens de serviços de terceiros.</li>
-            <li>Não possui formulários que enviem informações.</li>
-            <li>Não grava nada no seu navegador.</li>
-          </ul>
-
-          <h2>Busca e exercícios</h2>
-          <p>A busca de artigos e os exercícios da seção Momentos funcionam inteiramente no seu dispositivo. O que você digita na busca ou faz nos exercícios não é enviado nem armazenado.</p>
-
-          <h2>Hospedagem</h2>
-          <p>O site é hospedado no GitHub Pages. Como qualquer serviço de hospedagem, o GitHub pode registrar dados técnicos de acesso, como o endereço IP, para fins de segurança e funcionamento. O Entre Nós não tem acesso a esses registros. Mais informações estão na declaração de privacidade do GitHub.</p>
-
-          <h2>Links externos</h2>
-          <p>Os artigos e a página Encontrar ajuda apontam para sites de outras instituições. Ao acessá-los, valem as políticas de privacidade de cada um.</p>
-
-          <h2>LGPD</h2>
-          <p>Informações sobre saúde e vida emocional são dados pessoais sensíveis segundo a Lei Geral de Proteção de Dados (Lei nº 13.709/2018). Por isso escolhemos, nesta versão, não coletar nenhum dado. Se uma funcionalidade futura envolver dados pessoais, esta política será atualizada antes, com explicação clara sobre finalidade, base legal e direitos do titular.</p>
-
-          <h2>Mudanças nesta política</h2>
-          <p>Qualquer alteração será publicada nesta página, com a data de atualização.</p>
-        </div>
-      </div>
-    </section>''')
-
-# ---------- Responsabilidade ----------
-pagina("pages/responsabilidade.html", "Limites e responsabilidade editorial", "Como os conteúdos do Entre Nós são produzidos e revisados, e quais são os limites deste espaço.",
- cabecalho("Transparência", "Limites e responsabilidade editorial", "O que você pode esperar deste espaço, e o que ele não pode oferecer.") + '''
-    <section class="secao">
-      <div class="container">
-        <div class="prosa">
-          <h2 style="margin-top:0">Os limites deste espaço</h2>
-          <ul>
-            <li>O conteúdo é informativo e educativo. Não substitui consulta, avaliação, diagnóstico ou tratamento com profissionais de saúde.</li>
-            <li>Não fazemos diagnósticos, testes ou classificações, automáticos ou não.</li>
-            <li>Não prometemos cura nem resultados.</li>
-            <li>Não oferecemos atendimento individual e não respondemos a situações de crise.</li>
-          </ul>
-          <p class="aviso"><strong>Em crise?</strong> Ligue 188 (CVV, 24 horas, gratuito) ou 192 (SAMU, emergências médicas). Veja <a href="{{pages/encontrar-ajuda.html}}">Encontrar ajuda</a>.</p>
-
-          <h2>Como os conteúdos são produzidos</h2>
-          <ul>
-            <li><strong>Fontes:</strong> os artigos se baseiam em fontes científicas e institucionais, como a Organização Mundial da Saúde e o Ministério da Saúde, listadas ao final de cada texto.</li>
-            <li><strong>Autoria e datas:</strong> cada artigo indica quem escreveu, quando foi publicado e quando foi revisado.</li>
-            <li><strong>Revisão profissional:</strong> conteúdos com informação clínica devem ser revisados por profissional de saúde mental. Enquanto isso não acontece, o artigo exibe o aviso “Conteúdo em revisão”.</li>
-            <li><strong>Linguagem:</strong> evitamos dramatização, culpa e simplificações como “basta pensar positivo”.</li>
-          </ul>
-
-          <h2>Situação atual dos artigos</h2>
-          <p>Nesta primeira versão, todos os artigos foram redigidos a partir das fontes indicadas e <strong>aguardam revisão profissional</strong>. Essa situação aparece no topo de cada texto e será atualizada à medida que as revisões forem concluídas.</p>
-
-          <h2>Correções</h2>
-          <p>Informações em saúde mudam. Quando um conteúdo for corrigido ou atualizado, a data de revisão será alterada no próprio artigo.</p>
-
-          <h2>Independência</h2>
-          <p>O Entre Nós não recebe pagamento para recomendar profissionais, serviços, medicamentos ou produtos. Os serviços indicados em Encontrar ajuda são públicos ou sem fins lucrativos.</p>
-        </div>
-      </div>
-    </section>''')
-
-# ---------- Dados dos artigos ----------
-dados = {"categorias": CATEGORIAS, "artigos": ARTIGOS}
-(RAIZ / "js/data/articles.js").write_text(
-    "/* articles.js — conteúdo da biblioteca.\n"
-    "   Para publicar um artigo: adicione um objeto em \"artigos\" e um cartão em pages/conhecimento.html.\n"
-    "   \"revisado\": data ISO da revisão profissional (null = aguardando revisão); \"revisor\": nome e registro. */\n"
-    "window.ENTRE_NOS = " + json.dumps(dados, ensure_ascii=False, indent=2) + ";\n", encoding="utf-8")
-print("ok")
+# =====================================================================
+# Sitemap
+# =====================================================================
+urls = "\n".join(f"  <url><loc>{SITE_URL}{'' if c == 'index.html' else c}</loc></url>" for c, ok in GERADAS if ok)
+(RAIZ / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}\n</urlset>\n', encoding="utf-8")
+print(f"{len(GERADAS)} páginas geradas")

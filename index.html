@@ -4,14 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Entre Nós — Um espaço para cuidar do que sentimos</title>
-  <meta name="description" content="Plataforma de saúde emocional com informação confiável, exercícios de pausa e caminhos de apoio. Gratuita, sem cadastro e sem coleta de dados.">
+  <meta name="description" content="Plataforma independente de saúde emocional: leituras com fontes indicadas, pausas guiadas e caminhos de apoio. Gratuita, sem cadastro e sem rastreamento.">
   <meta name="theme-color" content="#263D32">
+  <link rel="canonical" href="https://smoreiraparanhos-web.github.io/entre-nos/">
+  <meta property="og:url" content="https://smoreiraparanhos-web.github.io/entre-nos/">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Entre Nós", "url": "https://smoreiraparanhos-web.github.io/entre-nos/", "inLanguage": "pt-BR", "description": "Plataforma independente de saúde emocional."}</script>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Entre Nós">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Entre Nós — Um espaço para cuidar do que sentimos">
-  <meta property="og:description" content="Plataforma de saúde emocional com informação confiável, exercícios de pausa e caminhos de apoio. Gratuita, sem cadastro e sem coleta de dados.">
+  <meta property="og:description" content="Plataforma independente de saúde emocional: leituras com fontes indicadas, pausas guiadas e caminhos de apoio. Gratuita, sem cadastro e sem rastreamento.">
+  <meta property="og:image" content="https://smoreiraparanhos-web.github.io/entre-nos/assets/images/compartilhar.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/newsreader-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/global.css">
@@ -25,8 +31,8 @@
 
   <header class="topo">
     <div class="container topo__linha">
-      <a class="marca" href="index.html" aria-label="Entre Nós — página inicial"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/><g fill="#DCE6D9"><path d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/></g></svg><span>Entre Nós</span></a>
-      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal">Menu</button>
+      <a class="marca" href="index.html" aria-label="Entre Nós — página inicial"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/><path fill="#DCE6D9" d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/></svg><span>Entre Nós</span></a>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal"><span class="menu-botao__icone" aria-hidden="true"></span>Menu</button>
       <nav class="nav" id="nav-principal" aria-label="Navegação principal">
         <ul class="nav__lista">
             <li><a href="index.html" aria-current="page">Início</a></li>
@@ -36,90 +42,138 @@
             <li><a href="pages/sobre.html">Sobre</a></li>
         </ul>
       </nav>
+      <a class="botao botao--ajuda" href="pages/encontrar-ajuda.html"><span class="rotulo-longo">Preciso de ajuda</span><span class="rotulo-curto">Ajuda</span></a>
     </div>
   </header>
 
   <main id="conteudo">
     <section class="hero">
-      <div class="container">
-        <div class="hero__conteudo">
+      <div class="container hero__grade">
+        <div>
           <span class="sobretitulo">Saúde emocional</span>
-          <h1>Um espaço para cuidar do que sentimos.</h1>
-          <p class="lead">Informação confiável, pausas para respirar e caminhos de apoio. Sem pressa, sem cadastro e no seu tempo.</p>
+          <h1>Um espaço para cuidar do que <em>sentimos</em>.</h1>
+          <p class="lead">Leituras cuidadosas, pausas para respirar e caminhos de apoio. Sem pressa, no seu tempo.</p>
           <div class="acoes">
-            <a class="botao" href="pages/conhecimento.html">Explorar conteúdos</a>
+            <a class="botao" href="pages/conhecimento.html">Explorar as leituras</a>
             <a class="botao botao--contorno" href="pages/momentos.html">Fazer uma pausa</a>
           </div>
+          <ul class="hero__garantias">
+            <li>Gratuito</li>
+            <li>Sem cadastro</li>
+            <li>Sem rastreamento</li>
+          </ul>
         </div>
+        <figure class="moldura">
+          <img src="assets/images/hero.svg" alt="" width="900" height="1035" fetchpriority="high">
+        </figure>
       </div>
-      <svg class="hero__paisagem" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-        <circle cx="930" cy="110" r="54" fill="#E9DDC4"/>
-        <path d="M0 190 C160 120 300 150 450 175 S760 110 930 150 1130 130 1200 150 V300 H0Z" fill="#DCE6D9"/>
-        <path d="M0 230 C140 180 260 215 420 205 S700 165 860 200 1080 180 1200 205 V300 H0Z" fill="#9DB3A1"/>
-        <g fill="#526F5B">
-          <path d="M0 262 C180 228 330 258 520 246 S820 222 1000 250 1140 240 1200 248 V300 H0Z"/>
-          <path d="M150 250 l14 -46 14 46z M178 252 l11 -34 11 34z M960 246 l15 -52 15 52z M992 248 l11 -36 11 36z M1030 250 l9 -28 9 28z"/>
-        </g>
-        <path d="M0 284 C220 262 420 286 640 276 S1000 268 1200 282 V300 H0Z" fill="#263D32"/>
-      </svg>
     </section>
 
     <section class="secao" aria-labelledby="t-caminhos">
       <div class="container">
         <div class="secao__cabecalho">
           <span class="sobretitulo">Por onde começar</span>
-          <h2 id="t-caminhos">Três caminhos, conforme o seu momento</h2>
+          <h2 id="t-caminhos">O que você procura hoje?</h2>
         </div>
-        <div class="grade">
-          <div class="caminho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.500v-13c-3-.5-6 0-8 1.5zM12 6v13"/></svg>
-            <h3>Quero entender</h3>
-            <p>Artigos sobre ansiedade, tristeza, solidão, esgotamento e outros temas, com fontes indicadas.</p>
-            <a href="pages/conhecimento.html">Ir para Conhecimento</a>
-          </div>
-          <div class="caminho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5C11 5 6 9.500 6 15.500c0 1.200.2 2.300.6 3.300M19 5c.8 8.500-2.500 13.500-8 13.500-1.500 0-3-.5-4.400-1.200M19 5c-5 2.500-9 7-12.400 13.800"/></svg>
-            <h3>Quero uma pausa</h3>
-            <p>Respiração guiada, atenção aos sentidos e perguntas para refletir. Poucos minutos bastam.</p>
-            <a href="pages/momentos.html">Ir para Momentos</a>
-          </div>
-          <div class="caminho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12.500 5.500 10a3.200 3.200 0 0 1 4.500-4.500l2 2 2-2a3.200 3.200 0 0 1 4.500 4.500L12 16.500l-1.500-1.500M3 14l4 4.500c1 1 2.500 1.500 4 1.500h3"/></svg>
-            <h3>Preciso de ajuda</h3>
+        <ol class="caminhos">
+          <li class="caminho">
+            <span class="caminho__num" aria-hidden="true">01</span>
+            <h3><a href="pages/conhecimento.html">Quero entender</a></h3>
+            <p>Textos sobre ansiedade, tristeza, solidão e esgotamento, com as fontes indicadas.</p>
+            <span class="caminho__seta" aria-hidden="true">→</span>
+          </li>
+          <li class="caminho">
+            <span class="caminho__num" aria-hidden="true">02</span>
+            <h3><a href="pages/momentos.html">Quero uma pausa</a></h3>
+            <p>Quatro exercícios breves de respiração, atenção e reflexão. De um a três minutos.</p>
+            <span class="caminho__seta" aria-hidden="true">→</span>
+          </li>
+          <li class="caminho">
+            <span class="caminho__num" aria-hidden="true">03</span>
+            <h3><a href="pages/encontrar-ajuda.html">Preciso de ajuda</a></h3>
             <p>Serviços públicos e gratuitos, e como chegar a um atendimento profissional.</p>
-            <a href="pages/encontrar-ajuda.html">Ir para Encontrar ajuda</a>
+            <span class="caminho__seta" aria-hidden="true">→</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="secao secao--borda" aria-labelledby="t-leituras">
+      <div class="container">
+        <div class="secao__cabecalho">
+          <span class="sobretitulo">Conhecimento</span>
+          <h2 id="t-leituras">Leituras para começar</h2>
+        </div>
+        <div class="destaque">
+          <article class="destaque__principal">
+            <span class="etiqueta">Ansiedade</span>
+            <h3><a href="pages/artigos/o-que-e-ansiedade.html">O que é ansiedade e como ela pode se manifestar?</a></h3>
+            <p>A ansiedade faz parte da experiência humana. Entender como ela aparece no corpo, nos pensamentos e no comportamento ajuda a reconhecer quando ela pede mais atenção.</p>
+            <p class="meta">4 min de leitura · Aguardando revisão profissional</p>
+          </article>
+          <div>
+            <div class="leituras">
+          <article class="leitura">
+            <span class="etiqueta">Depressão</span>
+            <h3><a href="pages/artigos/tristeza-ou-depressao.html">Como diferenciar tristeza de sintomas de depressão?</a></h3>
+            <p>Tristeza é uma emoção. Depressão é uma condição de saúde. As duas podem se parecer por fora, mas se diferenciam pela duração, pela intensidade e pelo quanto afetam a vida.</p>
+            <p class="meta"><span>4 min de leitura</span><span class="situacao">Aguardando revisão profissional</span></p>
+          </article>
+          <article class="leitura">
+            <span class="etiqueta">Saúde emocional no cotidiano</span>
+            <h3><a href="pages/artigos/como-procurar-ajuda-psicologica.html">Como procurar ajuda psicológica?</a></h3>
+            <p>Decidir procurar ajuda já é um passo. Saber por onde começar torna o seguinte mais fácil.</p>
+            <p class="meta"><span>4 min de leitura</span><span class="situacao">Aguardando revisão profissional</span></p>
+          </article>
+          <article class="leitura">
+            <span class="etiqueta">Relacionamentos</span>
+            <h3><a href="pages/artigos/como-apoiar-alguem.html">Como apoiar alguém que está passando por dificuldades?</a></h3>
+            <p>Quem acompanha alguém em sofrimento costuma ter medo de dizer a coisa errada. Na maior parte das vezes, estar presente importa mais do que encontrar a frase certa.</p>
+            <p class="meta"><span>4 min de leitura</span><span class="situacao">Aguardando revisão profissional</span></p>
+          </article>
+            </div>
+            <p style="margin-top:var(--e-4)"><a class="link-seta" href="pages/conhecimento.html">Ver todas as leituras</a></p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="secao secao--areia" aria-labelledby="t-destaques">
+    <section class="secao ciclos" aria-labelledby="t-ciclos">
       <div class="container">
-        <div class="secao__cabecalho">
-          <span class="sobretitulo">Em destaque</span>
-          <h2 id="t-destaques">Leituras para começar</h2>
+        <div class="ciclos__intro">
+          <div>
+            <span class="sobretitulo">Nosso jeito de ver</span>
+            <h2 id="t-ciclos">A vida acontece em ciclos</h2>
+          </div>
+          <p>Uma floresta não floresce o ano inteiro. Há meses de broto, de copa cheia, de folhas no chão e de galhos nus, e nenhum deles é um erro. Com o que sentimos, costuma ser parecido.</p>
         </div>
-        <div class="grade">
-        <article class="cartao" data-categoria="ansiedade">
-          <span class="etiqueta">Ansiedade</span>
-          <h3><a href="pages/artigo.html?id=o-que-e-ansiedade">O que é ansiedade e como ela pode se manifestar?</a></h3>
-          <p>A ansiedade faz parte da experiência humana. Entender como ela aparece no corpo, nos pensamentos e no comportamento ajuda a reconhecer quando ela pede mais atenção.</p>
-          <p class="cartao__meta">4 min de leitura</p>
-        </article>
-        <article class="cartao" data-categoria="cotidiano">
-          <span class="etiqueta">Saúde emocional no cotidiano</span>
-          <h3><a href="pages/artigo.html?id=como-procurar-ajuda-psicologica">Como procurar ajuda psicológica?</a></h3>
-          <p>Decidir procurar ajuda já é um passo. Saber por onde começar torna o seguinte mais fácil.</p>
-          <p class="cartao__meta">4 min de leitura</p>
-        </article>
-        <article class="cartao" data-categoria="relacionamentos">
-          <span class="etiqueta">Relacionamentos</span>
-          <h3><a href="pages/artigo.html?id=como-apoiar-alguem">Como apoiar alguém que está passando por dificuldades?</a></h3>
-          <p>Quem acompanha alguém em sofrimento costuma ter medo de dizer a coisa errada. Na maior parte das vezes, estar presente importa mais do que encontrar a frase certa.</p>
-          <p class="cartao__meta">4 min de leitura</p>
-        </article>
+        <div class="fases">
+          <div class="fase">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#D5DFD3" stroke-width="1.5" aria-hidden="true"><circle cx="20" cy="20" r="18"/><path d="M20 2a18 18 0 0 1 18 18H20z" fill="#D5DFD3" stroke="none"/></svg>
+            <p class="fase__estacao">Primavera</p>
+            <h3>Brotar</h3>
+            <p>Recomeços raramente são grandiosos. Às vezes, é só voltar a ter vontade de alguma coisa pequena.</p>
+          </div>
+          <div class="fase">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#D5DFD3" stroke-width="1.5" aria-hidden="true"><circle cx="20" cy="20" r="18"/><circle cx="20" cy="20" r="18" fill="#D5DFD3" stroke="none"/></svg>
+            <p class="fase__estacao">Verão</p>
+            <h3>Florescer</h3>
+            <p>Há fases de energia e de presença. Elas não são a medida de todas as outras, nem uma obrigação permanente.</p>
+          </div>
+          <div class="fase">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#D5DFD3" stroke-width="1.5" aria-hidden="true"><circle cx="20" cy="20" r="18"/><path d="M20 2a18 18 0 0 0 0 36z" fill="#D5DFD3" stroke="none"/></svg>
+            <p class="fase__estacao">Outono</p>
+            <h3>Soltar</h3>
+            <p>Perdas, despedidas e mudanças pedem tempo. Deixar ir também faz parte de continuar.</p>
+          </div>
+          <div class="fase">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#D5DFD3" stroke-width="1.5" aria-hidden="true"><circle cx="20" cy="20" r="18"/></svg>
+            <p class="fase__estacao">Inverno</p>
+            <h3>Repousar</h3>
+            <p>Recolher-se não é desistir. Muita coisa se refaz em silêncio, antes de aparecer.</p>
+          </div>
         </div>
-        <div class="acoes"><a class="botao botao--contorno" href="pages/conhecimento.html">Ver toda a biblioteca</a></div>
+        <p class="ciclos__fecho">Nenhuma estação dura para sempre, e ninguém precisa atravessá-las no mesmo ritmo. Mas ciclos não explicam tudo: quando o inverno parece não passar, <a href="pages/encontrar-ajuda.html">vale procurar ajuda</a>.</p>
       </div>
     </section>
 
@@ -128,46 +182,45 @@
         <div class="secao__cabecalho">
           <span class="sobretitulo">Temas</span>
           <h2 id="t-temas">Explorar por assunto</h2>
+          <p>A biblioteca cresce devagar: cada texto só entra depois de ter as fontes conferidas.</p>
         </div>
-        <ul class="categorias">
-          <li><a href="pages/conhecimento.html?categoria=ansiedade">Ansiedade</a></li>
-          <li><a href="pages/conhecimento.html?categoria=depressao">Depressão</a></li>
-          <li><a href="pages/conhecimento.html?categoria=solidao">Solidão</a></li>
-          <li><a href="pages/conhecimento.html?categoria=luto">Luto</a></li>
-          <li><a href="pages/conhecimento.html?categoria=relacionamentos">Relacionamentos</a></li>
-          <li><a href="pages/conhecimento.html?categoria=autoestima">Autoestima</a></li>
-          <li><a href="pages/conhecimento.html?categoria=esgotamento">Esgotamento emocional</a></li>
-          <li><a href="pages/conhecimento.html?categoria=autoconhecimento">Autoconhecimento</a></li>
-          <li><a href="pages/conhecimento.html?categoria=cotidiano">Saúde emocional no cotidiano</a></li>
+        <ul class="temas">
+          <li><a href="pages/conhecimento.html?categoria=ansiedade"><span>Ansiedade</span><small>1 leitura</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=depressao"><span>Depressão</span><small>1 leitura</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=solidao"><span>Solidão</span><small>1 leitura</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=luto"><span>Luto</span><small>em preparação</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=relacionamentos"><span>Relacionamentos</span><small>1 leitura</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=autoestima"><span>Autoestima</span><small>em preparação</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=esgotamento"><span>Esgotamento emocional</span><small>1 leitura</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=autoconhecimento"><span>Autoconhecimento</span><small>em preparação</small></a></li>
+          <li><a href="pages/conhecimento.html?categoria=cotidiano"><span>Saúde emocional no cotidiano</span><small>2 leituras</small></a></li>
         </ul>
       </div>
     </section>
 
-    <section class="secao secao--verde" aria-labelledby="t-ciclos">
-      <div class="container">
-        <div class="secao__cabecalho" style="margin-bottom:0">
-          <span class="sobretitulo">Nosso jeito de ver</span>
-          <h2 id="t-ciclos">Como a natureza, as pessoas têm ciclos</h2>
-          <p>Há tempos de crescer, de mudar e de descansar. Tristeza não é fraqueza, e ninguém precisa atravessar uma fase difícil no ritmo dos outros. O Entre Nós não existe para ensinar a ser feliz o tempo inteiro: existe para oferecer conhecimento, acolhimento e caminhos de cuidado.</p>
-          <div class="acoes"><a class="botao" href="pages/sobre.html">Conhecer o projeto</a></div>
+    <section class="secao secao--areia" aria-labelledby="t-apoio">
+      <div class="container apoio">
+        <div>
+          <span class="sobretitulo">Apoio</span>
+          <h2 id="t-apoio">Se hoje estiver difícil demais</h2>
+          <p>Você não precisa esperar a situação piorar para pedir ajuda. Estes serviços são gratuitos e funcionam a qualquer hora.</p>
+          <div class="acoes"><a class="botao botao--contorno" href="pages/encontrar-ajuda.html">Ver todos os caminhos de ajuda</a></div>
+        </div>
+        <div class="telefones">
+          <a class="telefone" href="tel:188"><strong>188</strong><span><b>CVV — Centro de Valorização da Vida</b>Apoio emocional, 24 horas</span></a>
+          <a class="telefone" href="tel:192"><strong>192</strong><span><b>SAMU</b>Emergências médicas, 24 horas</span></a>
         </div>
       </div>
     </section>
   </main>
-
-  <aside class="apoio-faixa" aria-label="Apoio imediato">
-    <div class="container">
-      Precisa conversar agora? O <strong>CVV</strong> atende pelo <a href="tel:188">188</a>, gratuitamente, 24 horas. Em emergência médica, ligue <a href="tel:192">192</a> (SAMU). <a href="pages/encontrar-ajuda.html">Ver todos os caminhos de ajuda</a>
-    </div>
-  </aside>
 
   <footer class="rodape">
     <div class="container">
       <div class="rodape__grade">
         <div>
           <p class="rodape__marca">Entre Nós</p>
-          <p>Um espaço para cuidar do que sentimos.</p>
-          <p style="margin-top:.75rem;max-width:26rem">Conteúdo informativo. Não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
+          <p class="rodape__assinatura">Um espaço para cuidar do que sentimos.</p>
+          <p class="rodape__nota">Plataforma independente de saúde emocional. O conteúdo é informativo e não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
         </div>
         <nav aria-label="Seções">
           <h2>Navegar</h2>
@@ -181,12 +234,19 @@
           <h2>O projeto</h2>
           <ul class="rodape__lista">
             <li><a href="pages/sobre.html">Sobre</a></li>
-            <li><a href="pages/privacidade.html">Privacidade</a></li>
             <li><a href="pages/responsabilidade.html">Responsabilidade editorial</a></li>
+            <li><a href="pages/privacidade.html">Privacidade</a></li>
           </ul>
         </nav>
+        <div>
+          <h2>Apoio imediato</h2>
+          <ul class="rodape__lista">
+            <li><a href="tel:188">CVV — 188</a></li>
+            <li><a href="tel:192">SAMU — 192</a></li>
+          </ul>
+        </div>
       </div>
-      <p class="rodape__fim">© <span data-ano>2026</span> Entre Nós. Este site não usa cookies nem coleta dados pessoais.</p>
+      <p class="rodape__fim"><span>© <span data-ano>2026</span> Entre Nós</span><span>Sem cookies, sem cadastro, sem rastreamento.</span></p>
     </div>
   </footer>
 </body>

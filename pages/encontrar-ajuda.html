@@ -6,12 +6,17 @@
   <title>Encontrar ajuda — Entre Nós</title>
   <meta name="description" content="Caminhos de apoio em saúde mental no Brasil: CVV 188, SAMU 192, CAPS, UBS e como procurar atendimento psicológico.">
   <meta name="theme-color" content="#263D32">
+  <link rel="canonical" href="https://smoreiraparanhos-web.github.io/entre-nos/pages/encontrar-ajuda.html">
+  <meta property="og:url" content="https://smoreiraparanhos-web.github.io/entre-nos/pages/encontrar-ajuda.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Entre Nós">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Encontrar ajuda — Entre Nós">
   <meta property="og:description" content="Caminhos de apoio em saúde mental no Brasil: CVV 188, SAMU 192, CAPS, UBS e como procurar atendimento psicológico.">
+  <meta property="og:image" content="https://smoreiraparanhos-web.github.io/entre-nos/assets/images/compartilhar.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/newsreader-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../css/reset.css">
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/global.css">
@@ -25,17 +30,18 @@
 
   <header class="topo">
     <div class="container topo__linha">
-      <a class="marca" href="../index.html" aria-label="Entre Nós — página inicial"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/><g fill="#DCE6D9"><path d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/></g></svg><span>Entre Nós</span></a>
-      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal">Menu</button>
+      <a class="marca" href="../index.html" aria-label="Entre Nós — página inicial"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#263D32"/><path fill="#DCE6D9" d="M46 16C28 16 17 26 17 40c0 3 .6 5.6 1.6 8C22 36 30 28 40 24c-9 6-15 14-18 25 2 .6 4 1 6 1 13 0 20-12 18-34z"/></svg><span>Entre Nós</span></a>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="nav-principal"><span class="menu-botao__icone" aria-hidden="true"></span>Menu</button>
       <nav class="nav" id="nav-principal" aria-label="Navegação principal">
         <ul class="nav__lista">
             <li><a href="../index.html">Início</a></li>
-            <li><a href="conhecimento.html">Conhecimento</a></li>
-            <li><a href="momentos.html">Momentos</a></li>
-            <li><a href="encontrar-ajuda.html" aria-current="page">Encontrar ajuda</a></li>
-            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="../pages/conhecimento.html">Conhecimento</a></li>
+            <li><a href="../pages/momentos.html">Momentos</a></li>
+            <li><a href="../pages/encontrar-ajuda.html" aria-current="page">Encontrar ajuda</a></li>
+            <li><a href="../pages/sobre.html">Sobre</a></li>
         </ul>
       </nav>
+      <a class="botao botao--ajuda" href="../pages/encontrar-ajuda.html"><span class="rotulo-longo">Preciso de ajuda</span><span class="rotulo-curto">Ajuda</span></a>
     </div>
   </header>
 
@@ -47,7 +53,7 @@
         <p class="lead">Pedir ajuda é um gesto de cuidado. Aqui estão caminhos públicos e gratuitos de atendimento no Brasil.</p>
       </div>
     </div>
-    <section class="secao">
+    <section class="secao" style="padding-bottom:0">
       <div class="container">
         <div class="urgencia">
           <h2>Se você está em crise agora</h2>
@@ -60,43 +66,49 @@
       </div>
     </section>
 
-    <section class="secao secao--areia" aria-labelledby="t-servicos">
+    <section class="secao" aria-labelledby="t-servicos">
       <div class="container">
         <div class="secao__cabecalho">
           <span class="sobretitulo">Serviços</span>
           <h2 id="t-servicos">Onde procurar atendimento</h2>
         </div>
-        <div class="grade">
-          <article class="recurso">
-            <span class="etiqueta">Apoio emocional · 24 horas</span>
-            <p class="recurso__numero">188</p>
-            <h3>CVV — Centro de Valorização da Vida</h3>
-            <p>Apoio emocional e prevenção do suicídio, por voluntários, com sigilo. A ligação é gratuita em todo o país. Também há atendimento por chat e e-mail no site.</p>
-            <a class="botao botao--contorno botao--pequeno" href="https://cvv.org.br/" rel="noopener noreferrer">Acessar cvv.org.br</a>
+        <div class="servicos">
+          <article class="servico">
+            <p class="servico__numero">188</p>
+            <div><span class="etiqueta">Apoio emocional · 24 horas</span><h3>CVV — Centro de Valorização da Vida</h3></div>
+            <div class="servico__corpo">
+              <p>Apoio emocional e prevenção do suicídio, por voluntários, com sigilo. A ligação é gratuita em todo o país. Também há atendimento por chat e e-mail no site.</p>
+              <a class="link-seta" href="https://cvv.org.br/" rel="noopener noreferrer">Acessar cvv.org.br</a>
+            </div>
           </article>
-          <article class="recurso">
-            <span class="etiqueta etiqueta--terra">Emergência médica · 24 horas</span>
-            <p class="recurso__numero">192</p>
-            <h3>SAMU</h3>
-            <p>Serviço de Atendimento Móvel de Urgência. Para situações com risco à vida, incluindo crises em saúde mental com risco imediato. A ligação é gratuita.</p>
-            <a class="botao botao--contorno botao--pequeno" href="tel:192">Ligar 192</a>
+          <article class="servico">
+            <p class="servico__numero">192</p>
+            <div><span class="etiqueta">Emergência médica · 24 horas</span><h3>SAMU</h3></div>
+            <div class="servico__corpo">
+              <p>Serviço de Atendimento Móvel de Urgência. Para situações com risco à vida, incluindo crises em saúde mental com risco imediato. A ligação é gratuita.</p>
+              <a class="link-seta" href="tel:192">Ligar 192</a>
+            </div>
           </article>
-          <article class="recurso">
-            <span class="etiqueta">SUS · sofrimento intenso</span>
-            <h3>CAPS — Centro de Atenção Psicossocial</h3>
-            <p>Serviço público para pessoas em sofrimento psíquico intenso ou persistente, com equipe multiprofissional. Em geral, recebe diretamente, sem necessidade de encaminhamento.</p>
-            <p>Para localizar o CAPS da sua região, consulte a secretaria de saúde do município ou a UBS mais próxima.</p>
+          <article class="servico">
+            <p class="servico__numero servico__numero--sigla">CAPS</p>
+            <div><span class="etiqueta">SUS · sofrimento intenso</span><h3>Centro de Atenção Psicossocial</h3></div>
+            <div class="servico__corpo">
+              <p>Serviço público para pessoas em sofrimento psíquico intenso ou persistente, com equipe multiprofissional. Em geral, recebe diretamente, sem necessidade de encaminhamento.</p>
+              <p>Para localizar o CAPS da sua região, consulte a secretaria de saúde do município ou a UBS mais próxima.</p>
+            </div>
           </article>
-          <article class="recurso">
-            <span class="etiqueta">SUS · porta de entrada</span>
-            <h3>UBS — Unidade Básica de Saúde</h3>
-            <p>O posto de saúde do seu bairro é o primeiro lugar para falar sobre como você tem se sentido. A equipe acolhe, acompanha e encaminha para outros serviços quando necessário.</p>
+          <article class="servico">
+            <p class="servico__numero servico__numero--sigla">UBS</p>
+            <div><span class="etiqueta">SUS · porta de entrada</span><h3>Unidade Básica de Saúde</h3></div>
+            <div class="servico__corpo">
+              <p>O posto de saúde do seu bairro é o primeiro lugar para falar sobre como você tem se sentido. A equipe acolhe, acompanha e encaminha para outros serviços quando necessário.</p>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="secao">
+    <section class="secao secao--areia">
       <div class="container">
         <div class="prosa">
           <h2 style="margin-top:0">Outros caminhos</h2>
@@ -105,47 +117,48 @@
             <li><strong>Plano de saúde:</strong> consultas com psicólogos e psiquiatras fazem parte da cobertura; verifique as condições do seu plano.</li>
             <li><strong>Atendimento particular:</strong> ao escolher um psicólogo, confira o registro no Conselho Regional de Psicologia (CRP).</li>
           </ul>
-          <p>Quer entender melhor as opções? Leia <a href="artigo.html?id=como-procurar-ajuda-psicologica">Como procurar ajuda psicológica?</a></p>
+          <p>Quer entender melhor as opções? Leia <a href="artigos/como-procurar-ajuda-psicologica.html">Como procurar ajuda psicológica?</a></p>
           <h2>Se a preocupação é com outra pessoa</h2>
-          <p>Fique por perto, escute sem julgar e ajude a pessoa a chegar a um desses serviços. Você também pode ligar para o 188 para se orientar. Leia <a href="artigo.html?id=como-apoiar-alguem">Como apoiar alguém que está passando por dificuldades?</a></p>
+          <p>Fique por perto, escute sem julgar e ajude a pessoa a chegar a um desses serviços. Você também pode ligar para o 188 para se orientar. Leia <a href="artigos/como-apoiar-alguem.html">Como apoiar alguém que está passando por dificuldades?</a></p>
           <p class="aviso">O Entre Nós não oferece atendimento, não responde mensagens e não acompanha casos. Os serviços listados são mantidos por outras instituições, e horários e condições podem variar por região.</p>
         </div>
       </div>
     </section>
   </main>
 
-  <aside class="apoio-faixa" aria-label="Apoio imediato">
-    <div class="container">
-      Precisa conversar agora? O <strong>CVV</strong> atende pelo <a href="tel:188">188</a>, gratuitamente, 24 horas. Em emergência médica, ligue <a href="tel:192">192</a> (SAMU). <a href="encontrar-ajuda.html">Ver todos os caminhos de ajuda</a>
-    </div>
-  </aside>
-
   <footer class="rodape">
     <div class="container">
       <div class="rodape__grade">
         <div>
           <p class="rodape__marca">Entre Nós</p>
-          <p>Um espaço para cuidar do que sentimos.</p>
-          <p style="margin-top:.75rem;max-width:26rem">Conteúdo informativo. Não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
+          <p class="rodape__assinatura">Um espaço para cuidar do que sentimos.</p>
+          <p class="rodape__nota">Plataforma independente de saúde emocional. O conteúdo é informativo e não substitui avaliação, diagnóstico ou acompanhamento profissional.</p>
         </div>
         <nav aria-label="Seções">
           <h2>Navegar</h2>
           <ul class="rodape__lista">
-            <li><a href="conhecimento.html">Conhecimento</a></li>
-            <li><a href="momentos.html">Momentos</a></li>
-            <li><a href="encontrar-ajuda.html">Encontrar ajuda</a></li>
+            <li><a href="../pages/conhecimento.html">Conhecimento</a></li>
+            <li><a href="../pages/momentos.html">Momentos</a></li>
+            <li><a href="../pages/encontrar-ajuda.html">Encontrar ajuda</a></li>
           </ul>
         </nav>
         <nav aria-label="Institucional">
           <h2>O projeto</h2>
           <ul class="rodape__lista">
-            <li><a href="sobre.html">Sobre</a></li>
-            <li><a href="privacidade.html">Privacidade</a></li>
-            <li><a href="responsabilidade.html">Responsabilidade editorial</a></li>
+            <li><a href="../pages/sobre.html">Sobre</a></li>
+            <li><a href="../pages/responsabilidade.html">Responsabilidade editorial</a></li>
+            <li><a href="../pages/privacidade.html">Privacidade</a></li>
           </ul>
         </nav>
+        <div>
+          <h2>Apoio imediato</h2>
+          <ul class="rodape__lista">
+            <li><a href="tel:188">CVV — 188</a></li>
+            <li><a href="tel:192">SAMU — 192</a></li>
+          </ul>
+        </div>
       </div>
-      <p class="rodape__fim">© <span data-ano>2026</span> Entre Nós. Este site não usa cookies nem coleta dados pessoais.</p>
+      <p class="rodape__fim"><span>© <span data-ano>2026</span> Entre Nós</span><span>Sem cookies, sem cadastro, sem rastreamento.</span></p>
     </div>
   </footer>
 </body>
